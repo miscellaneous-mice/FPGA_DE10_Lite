@@ -1,0 +1,129 @@
+/*
+ * main_test.c
+ *
+ *  Created on: Mar 5, 2026
+ *      Author: prate
+ */
+
+
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <math.h>
+#include "system.h"
+#include "io.h"
+
+#define N 64
+#define PI 3.14159265358979323846
+
+typedef struct { float Re; float Im; } complex_float;
+
+// Helper to handle 12-bit signed numbers
+int16_t sign_extend_12(uint16_t val) {
+    if (val & 0x800) return (val | 0xF000);
+    return val;
+}
+
+void hw_fft(complex_float *v, int n) {
+    uint32_t packed_data;
+    int16_t fixed_re, fixed_im;
+    float input_scale = 1024.0f; // 12-bit scale
+
+    // --- STEP 1: SEND DATA ---
+    for(int i = 0; i < n; i++) {
+        fixed_re = (int16_t)(v[i].Re * input_scale) & 0xFFF;
+        fixed_im = (int16_t)(v[i].Im * input_scale) & 0xFFF;
+
+        /*
+         * Packing for FIFO_IN (25 bits):
+         * [24:13] : Imaginary
+         * [12:1]  : Real
+         * [0]     : Inverse bit (0 = Forward)
+         */
+        packed_data = ((uint32_t)fixed_im << 13) | ((uint32_t)fixed_re << 1) | 0;
+
+        // Write Control (SOP/EOP) then Data
+        IOWR_32DIRECT(DSP_NIOS_FIFO_IN_IN_BASE, 4, (i == 0) ? 1 : (i == n-1 ? 2 : 0));
+        IOWR_32DIRECT(DSP_NIOS_FIFO_IN_IN_BASE, 0, packed_data);
+    }
+
+    // --- STEP 2: WAIT ---
+    while(IORD_32DIRECT(DSP_NIOS_FIFO_OUT_OUT_CSR_BASE, 0) < n);
+
+    // --- STEP 3: READ DATA ---
+    for(int i = 0; i < n; i++) {
+        packed_data = IORD_32DIRECT(DSP_NIOS_FIFO_OUT_OUT_BASE, 0);
+
+        /*
+         * Correct Bit Alignment for altera_avalon_fifo:
+         * Bits [29:24] : Exponent (6 bits)  <-- The "Error" bits from FFT
+         * Bits [23:12] : Imaginary (12 bits)
+         * Bits [11:0]  : Real (12 bits)
+         */
+        uint16_t raw_re   = (packed_data & 0xFFF);         // Real is at the bottom
+        uint16_t raw_im   = (packed_data >> 12) & 0xFFF;   // Imaginary is in the middle
+        uint8_t  exponent = (packed_data >> 24) & 0x3F;    // Exponent is at the top
+
+        // Sign extend the 12-bit signed values
+        int16_t final_re = sign_extend_12(raw_re);
+        int16_t final_im = sign_extend_12(raw_im);
+
+        // Block Floating Point math:
+        // The Exponent in the Altera FFT IP is usually a "Negative" shift.
+        // If the number is still huge, we divide by pow(2, exp) instead of multiplying.
+        float bfp_scale = powf(2.0f, (float)exponent);
+
+        v[i].Re = ((float)final_re / input_scale) * bfp_scale;
+        v[i].Im = ((float)final_im / input_scale) * bfp_scale;
+    }
+}
+
+int main() {
+    complex_float v[N];
+    printf("\n--- FFT HARDWARE DIAGNOSTIC TEST ---\n");
+
+    // 1. Generate Input: 0.5 magnitude Sine wave at 1/8th the sampling rate
+    for(int k = 0; k < N; k++) {
+        v[k].Re = 0.5f * cosf(2.0f * PI * k * 8.0f / 64.0f);
+        v[k].Im = 0.0f;
+    }
+
+    // 2. Run Hardware FFT
+    hw_fft(v, N);
+
+    // 3. Analyze Results (Looking for the Peak at Index 8)
+    printf("Index | Magnitude | Real      | Imag\n");
+    printf("------|-----------|-----------|-----------\n");
+
+    float max_mag = 0;
+    int max_idx = 0;
+
+    for(int i = 0; i < N; i++) {
+        float mag = sqrtf(v[i].Re * v[i].Re + v[i].Im * v[i].Im);
+
+        if (mag > max_mag) {
+            max_mag = mag;
+            max_idx = i;
+        }
+
+        // Print first 12 indices (We expect peak at 8)
+        if (i < 12) {
+            printf(" [%02d] | %9.4f | %9.4f | %9.4f %s\n",
+                   i, (double)mag, (double)v[i].Re, (double)v[i].Im, (i==8)?"<-- TARGET":"");
+        }
+    }
+
+    printf("\nTEST RESULT:\n");
+    printf("Highest Peak found at Index: %d\n", max_idx);
+    printf("Peak Magnitude: %f\n", (double)max_mag);
+
+    if (max_idx == 8 || max_idx == 56) {
+        printf(">>> SUCCESS: Hardware FFT is working correctly! <<<\n");
+    } else {
+        printf(">>> FAILURE: Peak not at expected index. Check bit alignment. <<<\n");
+    }
+
+    while(1);
+    return 0;
+}
+

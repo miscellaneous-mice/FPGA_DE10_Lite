@@ -1,0 +1,204 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <math.h>
+#include "system.h"
+#include "io.h"
+#include "sys/alt_flash.h"       // Required for Flash API
+#include "sys/alt_flash_dev.h"
+
+// 1. MUST match your FFT IP Length
+#define N 64
+#define PI 3.14159265358979323846
+
+typedef struct { float Re; float Im; } complex_float;
+
+void print_vector(const char *title, complex_float *x, int n) {
+    printf("%s (dim=%d):\n", title, n);
+    for(int i=0; i<n; i++) {
+        printf(" [%02d]: %7.4f + %7.4fj\n", i, x[i].Re, x[i].Im);
+    }
+}
+
+// Helper to handle 12-bit signed numbers
+int16_t sign_extend_12(uint16_t val) {
+    if (val & 0x800) return (val | 0xF000); // If bit 11 is 1, fill top bits with 1
+    return val;
+}
+
+void hw_fft(complex_float *v, int n) {
+    uint32_t packed_data;
+    int16_t fixed_re, fixed_im;
+    float input_scale = 1024.0f; // Scale for 12-bit (using 10 bits of precision)
+
+    // --- STEP 1: SEND DATA ---
+    for(int i=0; i<n; i++) {
+        fixed_re = (int16_t)(v[i].Re * input_scale) & 0xFFF; // Keep 12 bits
+        fixed_im = (int16_t)(v[i].Im * input_scale) & 0xFFF;
+
+        /*
+         * Pack for FIFO_IN (25 bits total):
+         * [24:13] = Imaginary (12 bits)
+         * [12:1]  = Real (12 bits)
+         * [0]     = Inverse Flag (0 = Forward FFT, 1 = iFFT)
+         */
+        packed_data = ((uint32_t)fixed_im << 13) | ((uint32_t)fixed_re << 1) | 0;
+
+        IOWR_32DIRECT(FIFO_IN_IN_BASE, 0, packed_data);
+    }
+
+    // --- STEP 2: WAIT ---
+    // Check Fill Level of Output FIFO CSR
+    while(IORD_32DIRECT(FIFO_OUT_OUT_CSR_BASE, 0) < n);
+
+    // --- STEP 3: READ DATA ---
+    for(int i=0; i<n; i++) {
+        packed_data = IORD_32DIRECT(FIFO_OUT_OUT_BASE, 0);
+
+        /*
+         * Unpack from FIFO_OUT (30 bits total):
+         * [29:18] = Imaginary (12 bits)
+         * [17:6]  = Real (12 bits)
+         * [5:0]   = Exponent (6 bits)
+         */
+        int16_t raw_re = (packed_data >> 6) & 0xFFF;
+        int16_t raw_im = (packed_data >> 18) & 0xFFF;
+        int8_t  exponent = packed_data & 0x3F;
+
+        // Handle negative numbers (Sign Extension)
+        int16_t final_re = sign_extend_12(raw_re);
+        int16_t final_im = sign_extend_12(raw_im);
+
+        // Convert back to float using the Block Floating Point exponent
+        // Actual value = (FixedPoint / Scale) * 2^Exponent
+        float bfp_scale = powf(2.0, (float)exponent);
+        v[i].Re = ((float)final_re / input_scale) * bfp_scale;
+        v[i].Im = ((float)final_im / input_scale) * bfp_scale;
+    }
+}
+
+void flash_interfacing()
+{
+    printf("Starting MAX 10 On-Chip Flash Test...\n");
+
+    // 1. Open the Flash Device
+    // The name comes from system.h, usually "/dev/onchip_flash_0"
+    alt_flash_fd* flash_handle;
+    flash_handle = alt_flash_open_dev(FLASH_MEM_DATA_NAME);
+
+    if (flash_handle == NULL) {
+        printf("Error: Could not open flash device.\n");
+        return 1;
+    }
+    printf("Flash opened successfully!\n");
+
+    // 2. Prepare data to write
+    char write_data[64] = "Hello Flash! This data survives power loss.";
+    char read_data[64]  = {0}; // Empty buffer for reading
+    int flash_offset = 0;      // Write to the very beginning of UFM1
+
+    // 3. Write to Flash
+    // alt_write_flash automatically erases the sector, then writes the data.
+    printf("Writing to Flash...\n");
+    int write_result = alt_write_flash(
+        flash_handle,
+        flash_offset,
+        write_data,
+        strlen(write_data) + 1 // +1 to include the null terminator
+    );
+
+    if (write_result == 0) {
+        printf("Write successful!\n");
+    } else {
+        printf("Write failed!\n");
+    }
+
+    // 4. Read from Flash
+    // We use the API to read it back into our empty read_data buffer
+    printf("Reading from Flash...\n");
+    int read_result = alt_read_flash(
+        flash_handle,
+        flash_offset,
+        read_data,
+        strlen(write_data) + 1
+    );
+
+    if (read_result == 0) {
+        printf("Data read from Flash: '%s'\n", read_data);
+    } else {
+        printf("Read failed!\n");
+    }
+
+    // 5. Close the device
+    alt_flash_close_dev(flash_handle);
+
+    printf("Test complete.\n");
+}
+
+int main()
+{
+	complex_float v[N];
+
+	printf("--- MAX 10 FPGA Hardware FFT (N=64) ---\n");
+
+	// Create a 1kHz Sine wave signal
+	for(int k=0; k<N; k++) {
+		v[k].Re = 0.5 * cos(2 * PI * k / 8.0); // Signal repeats every 8 samples
+		v[k].Im = 0.0;
+	}
+
+	print_vector("Input Signal", v, N);
+
+	hw_fft(v, N);
+
+	print_vector("Hardware FFT Result", v, N);
+
+	flash_interfacing();
+
+    printf("Starting Switch to Hex Display program...\n");
+
+    // Variables to hold our hardware states
+    uint32_t switch_value = 0;
+    uint32_t last_switch_value = 0xFFFFFFFF; // Set to invalid value initially
+
+    // Infinite loop to read hardware in real-time
+    while (1)
+    {
+        /*
+         * 1. READ FROM SWITCHES
+         * We use IORD_32DIRECT to read directly from the base address
+         * defined in your system.h file. Offset is 0.
+         */
+        switch_value = IORD_32DIRECT(IO_INTERFACE_SWITCH_INTERFACE_BASE, 0);
+
+        /*
+         * 2. WRITE TO 7-SEGMENT DISPLAY
+         * We use IOWR_32DIRECT to write the switch value directly to the
+         * hex display base address.
+         */
+        IOWR_32DIRECT(IO_INTERFACE_HEX_DISPLAY_BASE, 0, switch_value);
+
+        /*
+         * 3. PRINT TO CONSOLE (Only if the value changed)
+         * Printing every loop is too fast and will lag the JTAG UART.
+         * We only print when we detect the user flipped a switch.
+         */
+        if (switch_value != last_switch_value)
+        {
+            // Print both decimal and hexadecimal representations
+            printf("Switches changed! Value: %lu (0x%03lX)\n", switch_value, switch_value);
+
+            // Update last known state
+            last_switch_value = switch_value;
+        }
+
+        /*
+         * 4. SMALL DELAY
+         * Optional: A small 10ms delay to prevent the CPU from
+         * looping millions of times a second unnecessarily.
+         */
+        usleep(10000);
+    }
+
+    return 0;
+}

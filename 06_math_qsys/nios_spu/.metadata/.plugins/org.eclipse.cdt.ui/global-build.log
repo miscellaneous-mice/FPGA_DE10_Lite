@@ -1,0 +1,31 @@
+01:40:08 **** Incremental Build of configuration Nios II for project nios_interface ****
+make all 
+Info: Building ../nios_interface_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_interface_bsp/
+[BSP build complete]
+Info: Compiling main_test.c to obj/default/main_test.o
+nios2-elf-gcc -xc -MP -MMD -c -I../nios_interface_bsp//HAL/inc -I../nios_interface_bsp/ -I../nios_interface_bsp//drivers/inc  -pipe -D__hal__ -DALT_NO_C_PLUS_PLUS -DALT_NO_CLEAN_EXIT -D'exit(a)=_exit(a)' -DALT_NO_EXIT -DALT_USE_DIRECT_DRIVERS -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -Os -g -Wall   -mno-hw-div -mcustom-fpu-cfg=60-1 -mhw-mul -mno-hw-mulx -mgpopt=global  -o obj/default/main_test.o main_test.c
+Info: Linking nios_interface.elf
+nios2-elf-g++  -T'../nios_interface_bsp//linker.x' -msys-crt0='../nios_interface_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -L../nios_interface_bsp/  -mcustom-fpu-cfg=60-1  -Wl,-Map=nios_interface.map   -Os -g -Wall   -mno-hw-div -mcustom-fpu-cfg=60-1 -mhw-mul -mno-hw-mulx -mgpopt=global  -o nios_interface.elf obj/default/main.o obj/default/main_test.o -lm -msys-lib=m
+c:/intelfpga_lite/18.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(closer.o): In function `_close_r':
+/build/arc/temp/823101626/ACDS_lwr/ip/sopc/app/gnu/BUILD/gnu/build-newlib.nios2-elf.x86_64-w64-mingw32/nios2-elf/newlib/libc/reent/../../../../../src/newlib-2.2/newlib/libc/reent/closer.c:53: warning: warning: close is not implemented and will always fail
+c:/intelfpga_lite/18.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-lseekr.o): In function `_lseek_r':
+/build/arc/temp/823101626/ACDS_lwr/ip/sopc/app/gnu/BUILD/gnu/build-newlib.nios2-elf.x86_64-w64-mingw32/nios2-elf/newlib/libc/reent/../../../../../src/newlib-2.2/newlib/libc/reent/lseekr.c:58: warning: warning: lseek is not implemented and will always fail
+nios2-elf-insert nios_interface.elf --thread_model hal --cpu_name NIOS_II --qsys true --simulation_enabled false --id 0 --sidp 0x8201808 --timestamp 1772652671 --stderr_dev DEBUG --stdin_dev DEBUG --stdout_dev DEBUG --sopc_system_name avalon_design --quartus_project_dir "C:/Sandbox/FPGA_Clean/06_math_qsys/Qsys" --sopcinfo C:/Sandbox/FPGA_Clean/06_math_qsys/Qsys/software/nios_interface_bsp/../../avalon_design.sopcinfo
+Info: (nios_interface.elf) 83 KBytes program size (code + initialized data).
+Info:                      65446 KBytes free for stack + heap.
+Info: Creating nios_interface.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source nios_interface.elf >nios_interface.objdump
+[nios_interface build complete]
+01:40:20 **** Build of configuration Nios II for project nios_interface ****
+make all 
+Info: Building ../nios_interface_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_interface_bsp/
+[BSP build complete]
+[nios_interface build complete]
+01:40:21 **** Incremental Build of configuration Nios II for project nios_interface ****
+make all 
+Info: Building ../nios_interface_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_interface_bsp/
+[BSP build complete]
+[nios_interface build complete]

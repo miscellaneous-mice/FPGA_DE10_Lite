@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+#include "sys/alt_flash.h"       // Required for Flash API
+#include "sys/alt_flash_dev.h"
+
+int main()
+{
+    printf("Starting Switch to Hex Display program...\n");
+
+    // Variables to hold our hardware states
+    uint32_t switch_value = 0;
+    uint32_t last_switch_value = 0xFFFFFFFF; // Set to invalid value initially
+
+    // Infinite loop to read hardware in real-time
+    while (1)
+    {
+        /*
+         * 1. READ FROM SWITCHES
+         * We use IORD_32DIRECT to read directly from the base address
+         * defined in your system.h file. Offset is 0.
+         */
+        switch_value = IORD_32DIRECT(IO_INTERFACE_SWITCH_INTERFACE_BASE, 0);
+
+        /*
+         * 2. WRITE TO 7-SEGMENT DISPLAY
+         * We use IOWR_32DIRECT to write the switch value directly to the
+         * hex display base address.
+         */
+        IOWR_32DIRECT(IO_INTERFACE_HEX_DISPLAY_BASE, 0, switch_value);
+
+        /*
+         * 3. PRINT TO CONSOLE (Only if the value changed)
+         * Printing every loop is too fast and will lag the JTAG UART.
+         * We only print when we detect the user flipped a switch.
+         */
+        if (switch_value != last_switch_value)
+        {
+            // Print both decimal and hexadecimal representations
+            printf("Switches changed! Value: %lu (0x%03lX)\n", switch_value, switch_value);
+
+            // Update last known state
+            last_switch_value = switch_value;
+        }
+
+        /*
+         * 4. SMALL DELAY
+         * Optional: A small 10ms delay to prevent the CPU from
+         * looping millions of times a second unnecessarily.
+         */
+        usleep(10000);
+    }
+
+    return 0;
+}

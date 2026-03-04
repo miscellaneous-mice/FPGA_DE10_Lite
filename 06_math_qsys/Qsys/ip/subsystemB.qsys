@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags=""
+   categories="" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element FFT_IP
+   {
+      datum _sortIndex
+      {
+         value = "2";
+         type = "int";
+      }
+   }
+   element FIFO_IN
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+   }
+   element FIFO_IN.in
+   {
+      datum baseAddress
+      {
+         value = "72";
+         type = "String";
+      }
+   }
+   element FIFO_IN.in_csr
+   {
+      datum baseAddress
+      {
+         value = "32";
+         type = "String";
+      }
+   }
+   element FIFO_OUT
+   {
+      datum _sortIndex
+      {
+         value = "1";
+         type = "int";
+      }
+   }
+   element FIFO_OUT.out
+   {
+      datum baseAddress
+      {
+         value = "64";
+         type = "String";
+      }
+   }
+   element FIFO_OUT.out_csr
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
+   element clock_bridge
+   {
+      datum _sortIndex
+      {
+         value = "5";
+         type = "int";
+      }
+   }
+   element peripheral_bridge
+   {
+      datum _sortIndex
+      {
+         value = "3";
+         type = "int";
+      }
+   }
+   element reset_bridge
+   {
+      datum _sortIndex
+      {
+         value = "4";
+         type = "int";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="device" value="10M50DAF484C7G" />
+ <parameter name="deviceFamily" value="MAX 10" />
+ <parameter name="deviceSpeedGrade" value="7" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="false" />
+ <parameter name="lockedInterfaceDefinition" value="" />
+ <parameter name="maxAdditionalLatency" value="1" />
+ <parameter name="projectName" value="" />
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="false" />
+ <instanceScript></instanceScript>
+ <interface name="FIFO_IN_in_irq" internal="FIFO_IN.in_irq" />
+ <interface name="FIFO_OUT_out_irq" internal="FIFO_OUT.out_irq" />
+ <interface name="clk" internal="clock_bridge.in_clk" type="clock" dir="end" />
+ <interface name="reset" internal="reset_bridge.in_reset" type="reset" dir="end" />
+ <interface name="s0" internal="peripheral_bridge.s0" type="avalon" dir="end" />
+ <module name="FFT_IP" kind="altera_fft_ii" version="18.1" enabled="1">
+  <parameter name="data_flow" value="Streaming" />
+  <parameter name="data_rep">Block Floating Point</parameter>
+  <parameter name="design_env" value="QSYS" />
+  <parameter name="direction" value="Bi-directional" />
+  <parameter name="dsp_resource_opt" value="false" />
+  <parameter name="engine_arch" value="Quad Output" />
+  <parameter name="hard_fp" value="false" />
+  <parameter name="hyper_opt" value="false" />
+  <parameter name="in_order" value="Natural" />
+  <parameter name="in_width" value="12" />
+  <parameter name="length" value="64" />
+  <parameter name="num_engines" value="1" />
+  <parameter name="out_order" value="Natural" />
+  <parameter name="out_width" value="29" />
+  <parameter name="selected_device_family" value="MAX 10" />
+  <parameter name="twid_width" value="12" />
+ </module>
+ <module name="FIFO_IN" kind="altera_avalon_fifo" version="18.1" enabled="1">
+  <parameter name="avalonMMAvalonMMDataWidth" value="32" />
+  <parameter name="avalonMMAvalonSTDataWidth" value="32" />
+  <parameter name="bitsPerSymbol" value="25" />
+  <parameter name="channelWidth" value="0" />
+  <parameter name="deviceFamilyString" value="MAX 10" />
+  <parameter name="errorWidth" value="0" />
+  <parameter name="fifoDepth" value="128" />
+  <parameter name="fifoInputInterfaceOptions" value="AVALONMM_WRITE" />
+  <parameter name="fifoOutputInterfaceOptions" value="AVALONST_SOURCE" />
+  <parameter name="showHiddenFeatures" value="false" />
+  <parameter name="singleClockMode" value="false" />
+  <parameter name="singleResetMode" value="false" />
+  <parameter name="symbolsPerBeat" value="1" />
+  <parameter name="useBackpressure" value="true" />
+  <parameter name="useIRQ" value="false" />
+  <parameter name="usePacket" value="true" />
+  <parameter name="useReadControl" value="false" />
+  <parameter name="useRegister" value="false" />
+  <parameter name="useWriteControl" value="true" />
+ </module>
+ <module name="FIFO_OUT" kind="altera_avalon_fifo" version="18.1" enabled="1">
+  <parameter name="avalonMMAvalonMMDataWidth" value="32" />
+  <parameter name="avalonMMAvalonSTDataWidth" value="32" />
+  <parameter name="bitsPerSymbol" value="30" />
+  <parameter name="channelWidth" value="0" />
+  <parameter name="deviceFamilyString" value="MAX 10" />
+  <parameter name="errorWidth" value="0" />
+  <parameter name="fifoDepth" value="128" />
+  <parameter name="fifoInputInterfaceOptions" value="AVALONST_SINK" />
+  <parameter name="fifoOutputInterfaceOptions" value="AVALONMM_READ" />
+  <parameter name="showHiddenFeatures" value="false" />
+  <parameter name="singleClockMode" value="false" />
+  <parameter name="singleResetMode" value="false" />
+  <parameter name="symbolsPerBeat" value="1" />
+  <parameter name="useBackpressure" value="true" />
+  <parameter name="useIRQ" value="false" />
+  <parameter name="usePacket" value="true" />
+  <parameter name="useReadControl" value="true" />
+  <parameter name="useRegister" value="false" />
+  <parameter name="useWriteControl" value="false" />
+ </module>
+ <module
+   name="clock_bridge"
+   kind="altera_clock_bridge"
+   version="18.1"
+   enabled="1">
+  <parameter name="DERIVED_CLOCK_RATE" value="0" />
+  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
+  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
+ </module>
+ <module
+   name="peripheral_bridge"
+   kind="altera_avalon_mm_bridge"
+   version="18.1"
+   enabled="1">
+  <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
+  <parameter name="ADDRESS_WIDTH" value="10" />
+  <parameter name="DATA_WIDTH" value="32" />
+  <parameter name="LINEWRAPBURSTS" value="0" />
+  <parameter name="MAX_BURST_SIZE" value="1" />
+  <parameter name="MAX_PENDING_RESPONSES" value="4" />
+  <parameter name="PIPELINE_COMMAND" value="1" />
+  <parameter name="PIPELINE_RESPONSE" value="1" />
+  <parameter name="SYMBOL_WIDTH" value="8" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="7" />
+  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="0" />
+  <parameter name="USE_RESPONSE" value="0" />
+ </module>
+ <module
+   name="reset_bridge"
+   kind="altera_reset_bridge"
+   version="18.1"
+   enabled="1">
+  <parameter name="ACTIVE_LOW_RESET" value="0" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="0" />
+  <parameter name="NUM_RESET_OUTPUTS" value="1" />
+  <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
+  <parameter name="USE_RESET_REQUEST" value="0" />
+ </module>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="peripheral_bridge.m0"
+   end="FIFO_IN.in">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0048" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="peripheral_bridge.m0"
+   end="FIFO_IN.in_csr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0020" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="peripheral_bridge.m0"
+   end="FIFO_OUT.out">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0040" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="peripheral_bridge.m0"
+   end="FIFO_OUT.out_csr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon_streaming"
+   version="18.1"
+   start="FIFO_IN.out"
+   end="FFT_IP.sink" />
+ <connection
+   kind="avalon_streaming"
+   version="18.1"
+   start="FFT_IP.source"
+   end="FIFO_OUT.in" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="FFT_IP.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="peripheral_bridge.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="reset_bridge.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="FIFO_IN.clk_in" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="FIFO_OUT.clk_in" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="FIFO_IN.clk_out" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="FIFO_OUT.clk_out" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="peripheral_bridge.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="FIFO_OUT.reset_in" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="FIFO_IN.reset_in" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="FIFO_IN.reset_out" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="FIFO_OUT.reset_out" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="FFT_IP.rst" />
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
+</system>

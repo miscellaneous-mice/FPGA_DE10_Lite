@@ -1,0 +1,187 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <math.h>
+#include <string.h>
+#include "system.h"
+#include "io.h"
+#include "sys/alt_flash.h"
+#include "sys/alt_flash_dev.h"
+
+#define N 64
+#define PI 3.14159265358979323846
+
+typedef struct { float Re; float Im; } complex_float;
+
+int16_t sign_extend_12(uint16_t val) {
+    if (val & 0x800) return (val | 0xF000);
+    return val;
+}
+
+void print_vector(const char *title, complex_float *x, int n) {
+    printf("%s (dim=%d):\n", title, n);
+    for(int i=0; i<n; i++) {
+        if(i < 5 || i > n-3) {
+            // DEBUG: Convert to integer milli-units (e.g., 0.500 becomes 500)
+            // This works even if your printf is broken!
+            int re_milli = (int)(x[i].Re * 1000.0f);
+            int im_milli = (int)(x[i].Im * 1000.0f);
+
+            printf(" [%02d]: %d m + %d mj", i, re_milli, im_milli);
+
+            // Standard float print (requires Small C Library to be OFF)
+            printf(" (Raw: %f + %fj)\n", (double)x[i].Re, (double)x[i].Im);
+        }
+        if(i == 5) printf(" ... \n");
+    }
+    printf("\n");
+}
+
+void hw_fft(complex_float *v, int n) {
+    uint32_t packed_data;
+    int16_t fixed_re, fixed_im;
+    float input_scale = 1024.0f;
+
+    // --- STEP 1: SEND DATA ---
+    for(int i=0; i<n; i++) {
+        // Convert to 12-bit signed
+        fixed_re = (int16_t)(v[i].Re * input_scale) & 0xFFF;
+        fixed_im = (int16_t)(v[i].Im * input_scale) & 0xFFF;
+
+        /*
+         * Correct Input Packing for FIFO_IN (25 bits):
+         * [24]    : Inverse Flag (0 for Forward)
+         * [23:12] : Imaginary (12 bits)
+         * [11:0]  : Real (12 bits)
+         */
+        packed_data = ((uint32_t)fixed_im << 12) | ((uint32_t)fixed_re & 0xFFF);
+        // Bit 24 is 0 for Forward.
+        // Note: The SOP/EOP markers are handled in the control register (Offset 4)
+
+        IOWR_32DIRECT(DSP_NIOS_FIFO_IN_IN_BASE, 4, (i == 0) ? 1 : (i == n-1 ? 2 : 0));
+        IOWR_32DIRECT(DSP_NIOS_FIFO_IN_IN_BASE, 0, packed_data);
+    }
+
+    // --- STEP 2: WAIT ---
+    while(IORD_32DIRECT(DSP_NIOS_FIFO_OUT_OUT_CSR_BASE, 0) < n);
+
+    // --- STEP 3: READ DATA ---
+    for(int i=0; i<n; i++) {
+        packed_data = IORD_32DIRECT(DSP_NIOS_FIFO_OUT_OUT_BASE, 0);
+
+        /*
+         * Correct Output Unpacking for FIFO_OUT (30 bits):
+         * Bits [29:24] : Exponent (6 bits) - These are the "Error" bits
+         * Bits [23:12] : Imaginary (12 bits)
+         * Bits [11:0]  : Real (12 bits)
+         */
+        uint16_t raw_re = (packed_data & 0xFFF);
+        uint16_t raw_im = (packed_data >> 12) & 0xFFF;
+        uint8_t  exponent = (packed_data >> 24) & 0x3F;
+
+        // Sign extend the 12-bit values to 16-bit
+        int16_t final_re = sign_extend_12(raw_re);
+        int16_t final_im = sign_extend_12(raw_im);
+
+        // Block Floating Point math:
+        // Value = (FixedVal / input_scale) * 2^exponent
+        float bfp_scale = powf(2.0f, (float)exponent);
+
+        v[i].Re = ((float)final_re / input_scale) * bfp_scale;
+        v[i].Im = ((float)final_im / input_scale) * bfp_scale;
+    }
+}
+
+void flash_interfacing() {
+    printf("Starting MAX 10 On-Chip Flash Test...\n");
+
+    alt_flash_fd* flash_handle;
+    flash_handle = alt_flash_open_dev(FLASH_MEM_DATA_NAME);
+
+    if (flash_handle == NULL) {
+        printf("Error: Could not open flash device.\n");
+        return; // Fixed: void functions cannot return 1
+    }
+    printf("Flash opened successfully!\n");
+
+    char write_data[64] = "Hello Flash! This data survives power loss.";
+    char read_data[64]  = {0};
+    int flash_offset = 0;
+
+    printf("Writing to Flash...\n");
+    int write_result = alt_write_flash(
+        flash_handle,
+        flash_offset,
+        write_data,
+        strlen(write_data) + 1
+    );
+
+    if (write_result == 0) {
+        printf("Write successful!\n");
+    } else {
+        printf("Write failed!\n");
+    }
+
+    printf("Reading from Flash...\n");
+    int read_result = alt_read_flash(
+        flash_handle,
+        flash_offset,
+        read_data,
+        strlen(write_data) + 1
+    );
+
+    if (read_result == 0) {
+        printf("Data read from Flash: '%s'\n", read_data);
+    } else {
+        printf("Read failed!\n");
+    }
+
+    alt_flash_close_dev(flash_handle);
+    printf("Flash test complete.\n\n");
+}
+
+int main() {
+    printf("\n--- MAX 10 FPGA Flash System Initialized ---\n");
+
+    // 1. Run Flash Test
+    flash_interfacing();
+
+    complex_float v[N];
+
+    printf("\n--- MAX 10 FPGA DSP System ---\n");
+
+    // Initialize Input Signal (1kHz Sine)
+    for(int k=0; k<N; k++) {
+        v[k].Re = 0.5f * cosf(2.0f * PI * k / 8.0f);
+        v[k].Im = 0.0f;
+    }
+
+    print_vector("Input Signal", v, N);
+
+    hw_fft(v, N);
+
+    print_vector("FFT Result", v, N);
+
+    printf("Starting Switch-to-Hex Real-time loop...\n");
+
+    uint32_t switch_value = 0;
+    uint32_t last_switch_value = 0xFFFFFFFF;
+
+    while (1) {
+        // Read Switches
+        switch_value = IORD_32DIRECT(IO_INTERFACE_SWITCH_INTERFACE_BASE, 0);
+
+        // Write to Hex Display
+        IOWR_32DIRECT(IO_INTERFACE_HEX_DISPLAY_BASE, 0, switch_value);
+
+        // Print on change
+        if (switch_value != last_switch_value) {
+            printf("Switches: %lu (0x%03lX)\n", switch_value, switch_value);
+            last_switch_value = switch_value;
+        }
+
+        usleep(10000); // 10ms delay
+    }
+
+    return 0;
+}

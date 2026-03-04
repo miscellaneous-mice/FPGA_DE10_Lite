@@ -1,0 +1,186 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include <math.h>
+#include <string.h>
+#include "system.h"
+#include "io.h"
+#include "sys/alt_flash.h"
+#include "sys/alt_flash_dev.h"
+
+#define N 64
+#define PI 3.14159265358979323846
+
+typedef struct { float Re; float Im; } complex_float;
+
+int16_t sign_extend_12(uint16_t val) {
+    if (val & 0x800) return (val | 0xF000);
+    return val;
+}
+
+void print_vector(const char *title, complex_float *x, int n) {
+    printf("%s (dim=%d):\n", title, n);
+    for(int i=0; i<n; i++) {
+        if(i < 5 || i > n-3)
+            // Cast to double for reliable printf on Nios II
+            printf(" [%02d]: %7.4f + %7.4fj\n", i, (double)x[i].Re, (double)x[i].Im);
+        if(i == 5) printf(" ... \n");
+    }
+    printf("\n");
+}
+
+void hw_fft(complex_float *v, int n) {
+    uint32_t packed_data;
+    int16_t fixed_re, fixed_im;
+    float input_scale = 1024.0f;
+
+    printf("Starting Hardware FFT...\n");
+
+    // --- STEP 1: SEND DATA WITH PACKET MARKERS ---
+    for(int i=0; i<n; i++) {
+        fixed_re = (int16_t)(v[i].Re * input_scale) & 0xFFF;
+        fixed_im = (int16_t)(v[i].Im * input_scale) & 0xFFF;
+
+        // Pack: [24:13]=Im, [12:1]=Re, [0]=InvFlag
+        packed_data = ((uint32_t)fixed_im << 13) | ((uint32_t)fixed_re << 1) | 0;
+
+        // 1. Write the SOP/EOP markers to Offset 4
+        uint32_t control = 0;
+        if (i == 0)   control = 0x01; // Bit 0 is SOP
+        if (i == n-1) control = 0x02; // Bit 1 is EOP
+
+        IOWR_32DIRECT(DSP_NIOS_FIFO_IN_IN_BASE, 4, control);
+
+        // 2. Write the Data to Offset 0 (This pushes the word into the FIFO)
+        IOWR_32DIRECT(DSP_NIOS_FIFO_IN_IN_BASE, 0, packed_data);
+    }
+
+    printf("Data sent. Waiting for hardware...\n");
+
+    // --- STEP 2: WAIT ---
+    uint32_t fill_level = 0;
+    int timeout = 0;
+    while(fill_level < n) {
+        fill_level = IORD_32DIRECT(DSP_NIOS_FIFO_OUT_OUT_CSR_BASE, 0);
+
+        // Safety timeout (approx 1 second)
+        if(timeout++ > 1000000) {
+            printf("Error: Hardware Timeout! FIFO Level: %lu\n", fill_level);
+            return;
+        }
+    }
+
+    // --- STEP 3: READ DATA ---
+    for(int i=0; i<n; i++) {
+        packed_data = IORD_32DIRECT(DSP_NIOS_FIFO_OUT_OUT_BASE, 0);
+
+        uint16_t raw_re = (packed_data >> 6) & 0xFFF;
+        uint16_t raw_im = (packed_data >> 18) & 0xFFF;
+        uint8_t  exponent = packed_data & 0x3F;
+
+        int16_t final_re = sign_extend_12(raw_re);
+        int16_t final_im = sign_extend_12(raw_im);
+
+        float bfp_scale = powf(2.0f, (float)exponent);
+
+        v[i].Re = ((float)final_re / input_scale) * bfp_scale;
+        v[i].Im = ((float)final_im / input_scale) * bfp_scale;
+    }
+    printf("Result received successfully.\n");
+}
+
+void flash_interfacing() {
+    printf("Starting MAX 10 On-Chip Flash Test...\n");
+
+    alt_flash_fd* flash_handle;
+    flash_handle = alt_flash_open_dev(FLASH_MEM_DATA_NAME);
+
+    if (flash_handle == NULL) {
+        printf("Error: Could not open flash device.\n");
+        return; // Fixed: void functions cannot return 1
+    }
+    printf("Flash opened successfully!\n");
+
+    char write_data[64] = "Hello Flash! This data survives power loss.";
+    char read_data[64]  = {0};
+    int flash_offset = 0;
+
+    printf("Writing to Flash...\n");
+    int write_result = alt_write_flash(
+        flash_handle,
+        flash_offset,
+        write_data,
+        strlen(write_data) + 1
+    );
+
+    if (write_result == 0) {
+        printf("Write successful!\n");
+    } else {
+        printf("Write failed!\n");
+    }
+
+    printf("Reading from Flash...\n");
+    int read_result = alt_read_flash(
+        flash_handle,
+        flash_offset,
+        read_data,
+        strlen(write_data) + 1
+    );
+
+    if (read_result == 0) {
+        printf("Data read from Flash: '%s'\n", read_data);
+    } else {
+        printf("Read failed!\n");
+    }
+
+    alt_flash_close_dev(flash_handle);
+    printf("Flash test complete.\n\n");
+}
+
+int main() {
+    complex_float v[N];
+
+    printf("\n--- MAX 10 FPGA DSP System Initialized ---\n");
+
+    // 1. Run Flash Test
+    flash_interfacing();
+
+    complex_float v[N];
+
+    printf("\n--- MAX 10 FPGA DSP System ---\n");
+
+    // Initialize Input Signal (1kHz Sine)
+    for(int k=0; k<N; k++) {
+        v[k].Re = 0.5f * cosf(2.0f * PI * k / 8.0f);
+        v[k].Im = 0.0f;
+    }
+
+    print_vector("Input Signal", v, N);
+
+    hw_fft(v, N);
+
+    print_vector("FFT Result", v, N);
+
+    printf("Starting Switch-to-Hex Real-time loop...\n");
+
+    uint32_t switch_value = 0;
+    uint32_t last_switch_value = 0xFFFFFFFF;
+
+    while (1) {
+        // Read Switches
+        switch_value = IORD_32DIRECT(IO_INTERFACE_SWITCH_INTERFACE_BASE, 0);
+
+        // Write to Hex Display
+        IOWR_32DIRECT(IO_INTERFACE_HEX_DISPLAY_BASE, 0, switch_value);
+
+        // Print on change
+        if (switch_value != last_switch_value) {
+            printf("Switches: %lu (0x%03lX)\n", switch_value, switch_value);
+            last_switch_value = switch_value;
+        }
+
+        usleep(10000); // 10ms delay
+    }
+
+    return 0;
+}
