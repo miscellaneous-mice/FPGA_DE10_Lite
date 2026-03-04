@@ -1,0 +1,71 @@
+`timescale 1ns/1ps
+
+module d_flip_flop_tb;
+
+    // 1. Declare signals
+    reg         CLOCK_50;
+    reg  [9:0]  SW;
+    reg  [0:0]  KEY;
+    wire [7:0]  HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
+
+    // 2. Instantiate the Unit Under Test (UUT)
+    d_flip_flop UUT (
+        .CLOCK_50(CLOCK_50),
+        .SW(SW),
+        .KEY(KEY),
+        .HEX0(HEX0), .HEX1(HEX1), .HEX2(HEX2), 
+        .HEX3(HEX3), .HEX4(HEX4), .HEX5(HEX5)
+    );
+
+    // 3. Clock Generation (50MHz -> 20ns period)
+    always #10 CLOCK_50 = ~CLOCK_50;
+
+    // 4. Test Stimulus
+    initial begin
+        // --- Setup for Simulation Speed ---
+        // We "force" the internal limits to be small so we don't wait millions of cycles
+        force UUT.SPEED_LIMIT = 100;          // Countdown happens every 100 cycles instead of 25M
+        force UUT.DB.cnt = 20'd999990;       // Start debounce counter near the end (1M)
+
+        // Initialize inputs
+        CLOCK_50 = 0;
+        SW = 10'b0;
+        KEY = 1'b1;     // Key is active low, so 1 is "not pressed"
+        
+        #100;           // Wait a bit
+        
+        // --- Test Scenario 1: Load and Start ---
+        $display("Setting switches to 3 and pressing KEY0...");
+        SW[3:0] = 4'h3; // Want to count down from 3
+        
+        #20 KEY[0] = 0; // Press button
+        
+        // Wait long enough for the debouncer (it's forced to finish quickly)
+        #500; 
+        
+        KEY[0] = 1;     // Release button
+        $display("Button released. Counter should be starting now.");
+
+        // --- Wait and watch the countdown ---
+        // Since we forced SPEED_LIMIT to 100, each "tick" is 20ns * 100 = 2us
+        #10000; 
+
+        // --- Test Scenario 2: Load a different value ---
+        $display("Setting switches to 5 and restarting...");
+        SW[3:0] = 4'h5;
+        force UUT.DB.cnt = 20'd999990; // Reset debounce assist
+        #20 KEY[0] = 0; 
+        #500 KEY[0] = 1;
+
+        #20000; // Watch it count down from 5
+        
+        $display("Simulation finished.");
+        $finish;
+    end
+
+    // Optional: Monitor the HEX output in the console
+    initial begin
+        $monitor("Time: %t | SW: %h | HEX0 (Segments): %b", $time, SW[3:0], HEX0);
+    end
+
+endmodule

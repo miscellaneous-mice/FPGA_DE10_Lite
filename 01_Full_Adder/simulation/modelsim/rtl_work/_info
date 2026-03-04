@@ -1,0 +1,121 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Sandbox/FPGA_Clean/01_Full_Adder/simulation/modelsim
+vfull_adder
+Z1 !s110 1772621593
+!i10b 1
+!s100 7F=fV_D_f7zOONBS60BST0
+IPo8^gch_bCmc]Wg94Li_92
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1772621173
+Z4 8C:/Sandbox/FPGA_Clean/01_Full_Adder/src/full_adder.v
+Z5 FC:/Sandbox/FPGA_Clean/01_Full_Adder/src/full_adder.v
+L0 1
+Z6 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z7 !s108 1772621593.000000
+Z8 !s107 C:/Sandbox/FPGA_Clean/01_Full_Adder/src/full_adder.v|
+Z9 !s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA_Clean/01_Full_Adder/src|C:/Sandbox/FPGA_Clean/01_Full_Adder/src/full_adder.v|
+!i113 1
+Z10 o-vlog01compat -work work
+Z11 !s92 -vlog01compat -work work +incdir+C:/Sandbox/FPGA_Clean/01_Full_Adder/src
+Z12 tCvgOpt 0
+vfull_adder_4bit
+R1
+!i10b 1
+!s100 6m?o6?[RKEHEm_GYe2N@50
+ITX`W:h_fmK=_]2f>K[=RJ0
+R2
+R0
+R3
+R4
+R5
+L0 89
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+R12
+vfull_adder_tb
+R1
+!i10b 1
+!s100 izR[`YA;:ElKGYa@_2C>g0
+Ic0?=HOCZl^eMfJA;fj4950
+R2
+R0
+w1772621108
+8C:/Sandbox/FPGA_Clean/01_Full_Adder/src/full_adder_tb.v
+FC:/Sandbox/FPGA_Clean/01_Full_Adder/src/full_adder_tb.v
+L0 3
+R6
+r1
+!s85 0
+31
+R7
+!s107 C:/Sandbox/FPGA_Clean/01_Full_Adder/src/full_adder_tb.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA_Clean/01_Full_Adder/src|C:/Sandbox/FPGA_Clean/01_Full_Adder/src/full_adder_tb.v|
+!i113 1
+R10
+R11
+R12
+vHexDigit_Decoder
+R1
+!i10b 1
+!s100 oio:hbhK1EJD<>N>0_oFh2
+IbcL0iFlK[IH59:7]h@9?Z1
+R2
+R0
+R3
+R4
+R5
+L0 130
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+R12
+n@hex@digit_@decoder
+vkey_debounce
+R1
+!i10b 1
+!s100 aHKS4aL:YPD2Z61N@`aGa1
+IEd0ilaQRjO5Oe32PlUGO00
+R2
+R0
+R3
+R4
+R5
+L0 99
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+R12

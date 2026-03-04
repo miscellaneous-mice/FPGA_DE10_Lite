@@ -1,0 +1,45 @@
+19:53:41 **** Incremental Build of configuration Nios II for project nios_interfacing ****
+make all 
+Info: Building ../nios_interfacing_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_interfacing_bsp/
+[BSP build complete]
+Info: Compiling main.c to obj/default/main.o
+nios2-elf-gcc -xc -MP -MMD -c -I../nios_interfacing_bsp//HAL/inc -I../nios_interfacing_bsp/ -I../nios_interfacing_bsp//drivers/inc  -pipe -D__hal__ -DALT_NO_C_PLUS_PLUS -DALT_NO_CLEAN_EXIT -D'exit(a)=_exit(a)' -DALT_NO_EXIT -DALT_USE_DIRECT_DRIVERS -DALT_NO_INSTRUCTION_EMULATION -DALT_USE_SMALL_DRIVERS -DSMALL_C_LIB -DALT_SINGLE_THREADED    -Os -g -Wall   -mno-hw-div -mhw-mul -mno-hw-mulx -mgpopt=global  -o obj/default/main.o main.c
+Info: Linking nios_interfacing.elf
+nios2-elf-g++  -T'../nios_interfacing_bsp//linker.x' -msys-crt0='../nios_interfacing_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -L../nios_interfacing_bsp/  -msmallc  -Wl,-Map=nios_interfacing.map   -Os -g -Wall   -mno-hw-div -mhw-mul -mno-hw-mulx -mgpopt=global  -o nios_interfacing.elf obj/default/main.o -lm -msys-lib=m
+nios2-elf-insert nios_interfacing.elf --thread_model hal --cpu_name NIOS_II --qsys true --simulation_enabled false --id 0 --sidp 0x41400 --timestamp 1772633514 --stderr_dev mem_sys_subsystem_DEBUG --stdin_dev mem_sys_subsystem_DEBUG --stdout_dev mem_sys_subsystem_DEBUG --sopc_system_name avalon_design --quartus_project_dir "C:/Sandbox/FPGA_Clean/05_avalon_qsys/Qsys" --sopcinfo C:/Sandbox/FPGA_Clean/05_avalon_qsys/Qsys/software/nios_interfacing_bsp/../../avalon_design.sopcinfo
+Info: (nios_interfacing.elf) 3932 Bytes program size (code + initialized data).
+Info:                        123 KBytes free for stack + heap.
+Info: Creating nios_interfacing.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source nios_interfacing.elf >nios_interfacing.objdump
+[nios_interfacing build complete]
+19:54:20 **** Build of configuration Nios II for project nios_interfacing ****
+make all 
+Info: Building ../nios_interfacing_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_interfacing_bsp/
+[BSP build complete]
+[nios_interfacing build complete]
+19:54:39 **** Incremental Build of configuration Nios II for project nios_interfacing ****
+make all 
+Info: Building ../nios_interfacing_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_interfacing_bsp/
+[BSP build complete]
+[nios_interfacing build complete]
+19:55:30 **** Build of configuration Nios II for project nios_interfacing ****
+make all 
+Info: Building ../nios_interfacing_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_interfacing_bsp/
+[BSP build complete]
+[nios_interfacing build complete]
+19:55:35 **** Build of configuration Nios II for project nios_interfacing ****
+make all 
+Info: Building ../nios_interfacing_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_interfacing_bsp/
+[BSP build complete]
+[nios_interfacing build complete]
+19:55:36 **** Incremental Build of configuration Nios II for project nios_interfacing ****
+make all 
+Info: Building ../nios_interfacing_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_interfacing_bsp/
+[BSP build complete]
+[nios_interfacing build complete]

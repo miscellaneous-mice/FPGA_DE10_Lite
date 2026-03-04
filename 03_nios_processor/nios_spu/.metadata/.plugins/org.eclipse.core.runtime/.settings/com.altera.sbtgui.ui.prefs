@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+newSoftwareExampleWizardPage.defaultLocation=C\:\\Sandbox\\FPGA_Clean\\03_nios_processor\\Qsys\\software\\nios_sw
+newSoftwareExampleWizardPage.sopcinfoFile=C\:\\Sandbox\\FPGA_Clean\\03_nios_processor\\Qsys\\nios_interface.sopcinfo
+newSoftwareExampleWizardPage2.newBspLocation=C\:\\Sandbox\\FPGA_Clean\\03_nios_processor\\Qsys\\software\\nios_sw_bsp

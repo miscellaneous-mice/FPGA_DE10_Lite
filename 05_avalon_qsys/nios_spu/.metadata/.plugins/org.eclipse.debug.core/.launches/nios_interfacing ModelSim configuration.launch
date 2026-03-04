@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="com.altera.sbtgui.launch.modelsim.Nios2ModelsimLaunchConfiguration">
+<stringAttribute key="elfFile" value="C:\Sandbox\FPGA_Clean\05_avalon_qsys\Qsys\software\nios_interfacing\nios_interfacing.elf"/>
+<stringAttribute key="modelSimPath" value="C:\intelFPGA_lite\18.1\modelsim_ase\win32aloem"/>
+<stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_ID" value="com.altera.debug.cdi.gdb.plugin.Nios2GdbCdiDebugger"/>
+<stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_START_MODE" value="run"/>
+<booleanAttribute key="org.eclipse.cdt.launch.DEBUGGER_STOP_AT_MAIN" value="true"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="nios_interfacing.elf"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="nios_interfacing"/>
+<stringAttribute key="spdPath" value="C:\Sandbox\FPGA_Clean\05_avalon_qsys\Qsys\avalon_design_tb.spd"/>
+</launchConfiguration>

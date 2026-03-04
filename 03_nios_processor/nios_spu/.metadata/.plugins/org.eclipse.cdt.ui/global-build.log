@@ -1,0 +1,39 @@
+17:10:07 **** Build of configuration Nios II for project nios_sw ****
+make all 
+Info: Building ../nios_sw_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_sw_bsp/
+[BSP build complete]
+Info: Compiling main.c to obj/default/main.o
+nios2-elf-gcc -xc -MP -MMD -c -I../nios_sw_bsp//HAL/inc -I../nios_sw_bsp/ -I../nios_sw_bsp//drivers/inc  -pipe -D__hal__ -DALT_NO_C_PLUS_PLUS -DALT_NO_CLEAN_EXIT -D'exit(a)=_exit(a)' -DALT_NO_EXIT -DALT_USE_DIRECT_DRIVERS -DALT_NO_INSTRUCTION_EMULATION -DALT_USE_SMALL_DRIVERS -DSMALL_C_LIB -DALT_SINGLE_THREADED    -Os -g -Wall   -mno-hw-div -mhw-mul -mno-hw-mulx -mgpopt=global  -o obj/default/main.o main.c
+Info: Linking nios_sw.elf
+nios2-elf-g++  -T'../nios_sw_bsp//linker.x' -msys-crt0='../nios_sw_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -L../nios_sw_bsp/  -msmallc  -Wl,-Map=nios_sw.map   -Os -g -Wall   -mno-hw-div -mhw-mul -mno-hw-mulx -mgpopt=global  -o nios_sw.elf obj/default/main.o -lm -msys-lib=m
+nios2-elf-insert nios_sw.elf --thread_model hal --cpu_name NIOS_II --qsys true --simulation_enabled false --id 0 --sidp 0x1041000 --timestamp 1772624077 --stderr_dev DEBUG --stdin_dev DEBUG --stdout_dev DEBUG --sopc_system_name nios_interface --quartus_project_dir "C:/Sandbox/FPGA_Clean/03_nios_processor/Qsys" --sopcinfo C:/Sandbox/FPGA_Clean/03_nios_processor/Qsys/software/nios_sw_bsp/../../nios_interface.sopcinfo
+Info: (nios_sw.elf) 1420 Bytes program size (code + initialized data).
+Info:               126 KBytes free for stack + heap.
+Info: Creating nios_sw.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source nios_sw.elf >nios_sw.objdump
+[nios_sw build complete]
+17:10:36 **** Build of configuration Nios II for project nios_sw ****
+make all 
+Info: Building ../nios_sw_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_sw_bsp/
+[BSP build complete]
+[nios_sw build complete]
+17:11:16 **** Incremental Build of configuration Nios II for project nios_sw ****
+make all 
+Info: Building ../nios_sw_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_sw_bsp/
+[BSP build complete]
+[nios_sw build complete]
+17:14:48 **** Build of configuration Nios II for project nios_sw ****
+make all 
+Info: Building ../nios_sw_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_sw_bsp/
+[BSP build complete]
+[nios_sw build complete]
+17:14:49 **** Incremental Build of configuration Nios II for project nios_sw ****
+make all 
+Info: Building ../nios_sw_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../nios_sw_bsp/
+[BSP build complete]
+[nios_sw build complete]

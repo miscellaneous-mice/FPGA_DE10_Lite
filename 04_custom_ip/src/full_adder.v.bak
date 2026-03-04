@@ -1,0 +1,65 @@
+module full_adder (
+    input  wire        CLOCK_50,
+    input  wire [9:0]  SW,
+    input  wire [0:0]  KEY,
+    output wire [7:0]  HEX0,
+    output wire [7:0]  HEX1,
+    output wire [7:0]  HEX2,
+    output wire [7:0]  HEX3,
+    output wire [7:0]  HEX4,
+    output wire [7:0]  HEX5
+);
+
+    // FSM signals
+    localparam READ_A = 2'd0, READ_B = 2'd1, SHOW = 2'd2;
+    reg [1:0] state = READ_A;
+    reg [3:0] A, B;
+    wire [3:0] SUM;
+    wire CARRY;
+    wire key_pressed;
+    reg [3:0] hex0_val, hex1_val;
+
+    // FSM Logic (Keep this here for now)
+    always @(posedge CLOCK_50) begin
+        if (key_pressed) begin
+            case (state)
+                READ_A: begin A <= SW[3:0]; state <= READ_B; end
+                READ_B: begin B <= SW[3:0]; state <= SHOW; end
+                SHOW:   begin state <= READ_A; end
+            endcase
+        end
+    end
+
+    always @(*) begin
+        hex0_val = (state == SHOW) ? SUM : SW[3:0];
+        hex1_val = (state == SHOW) ? {3'b000, CARRY} : 4'h0;
+    end
+
+    // INSTANTIATE THE QSYS SYSTEM
+    // This replaces your manual FA, DB, and Decoder instances
+    seg_disp u0 (
+        .clk_clk                (CLOCK_50),
+        .reset_reset_n          (1'b1),        // Assuming no reset button
+        
+        // Debouncer conduits
+        .key_deboucer_signals_input          (KEY[0]),      // Input to IP
+        .key_deboucer_signals_output         (key_pressed), // Output from IP
+        
+        // Full Adder conduits
+        .full_adder_signals_fa_a            (A),           // Input to IP
+        .full_adder_signals_fa_b            (B),           // Input to IP
+        .full_adder_signals_fa_sum          (SUM),         // Output from IP
+        .full_adder_signals_fa_carry        (CARRY),       // Output from IP
+        
+        // Hex Decoder 0 conduits
+        .hex_display_signals_input     (hex0_val),    // Input to IP
+        .hex_display_signals_output    (HEX0),        // Output from IP to physical pins
+        
+        // Hex Decoder 1 conduits
+        .hex_display_signals_1_input     (hex1_val),    // Input to IP
+        .hex_display_signals_1_output    (HEX1)         // Output from IP to physical pins
+    );
+
+    assign {HEX2, HEX3, HEX4, HEX5} = 32'hFFFFFFFF;
+
+endmodule

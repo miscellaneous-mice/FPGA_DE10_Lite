@@ -1,0 +1,46 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate C:\Sandbox\FPGA_Clean\04_custom_ip\Qsys\peripheral_interface.qsys --block-symbol-file --output-directory=C:\Sandbox\FPGA_Clean\04_custom_ip\Qsys\peripheral_interface --family="MAX 10" --part=10M50DAF484C7G
+Progress: Loading Qsys/peripheral_interface.qsys
+Progress: Reading input file
+Progress: Adding clk_0 [clock_source 18.1]
+Progress: Parameterizing module clk_0
+Progress: Adding full_adder_4bit_0 [full_adder_4bit 1.0]
+Progress: Parameterizing module full_adder_4bit_0
+Progress: Adding hex_display_0 [hex_display 1.0]
+Progress: Parameterizing module hex_display_0
+Progress: Adding hex_display_1 [hex_display 1.0]
+Progress: Parameterizing module hex_display_1
+Progress: Adding key_register_0 [key_register 1.0]
+Progress: Parameterizing module key_register_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate C:\Sandbox\FPGA_Clean\04_custom_ip\Qsys\peripheral_interface.qsys --synthesis=VERILOG --output-directory=C:\Sandbox\FPGA_Clean\04_custom_ip\Qsys\peripheral_interface\synthesis --family="MAX 10" --part=10M50DAF484C7G
+Progress: Loading Qsys/peripheral_interface.qsys
+Progress: Reading input file
+Progress: Adding clk_0 [clock_source 18.1]
+Progress: Parameterizing module clk_0
+Progress: Adding full_adder_4bit_0 [full_adder_4bit 1.0]
+Progress: Parameterizing module full_adder_4bit_0
+Progress: Adding hex_display_0 [hex_display 1.0]
+Progress: Parameterizing module hex_display_0
+Progress: Adding hex_display_1 [hex_display 1.0]
+Progress: Parameterizing module hex_display_1
+Progress: Adding key_register_0 [key_register 1.0]
+Progress: Parameterizing module key_register_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: peripheral_interface: Generating peripheral_interface "peripheral_interface" for QUARTUS_SYNTH
+Info: full_adder_4bit_0: "peripheral_interface" instantiated full_adder_4bit "full_adder_4bit_0"
+Info: hex_display_0: "peripheral_interface" instantiated hex_display "hex_display_0"
+Info: key_register_0: "peripheral_interface" instantiated key_register "key_register_0"
+Info: peripheral_interface: Done "peripheral_interface" with 4 modules, 4 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis

@@ -1,0 +1,8 @@
+	component nios_interface is
+		port (
+			button_external_export : in  std_logic := 'X'; -- export
+			clk_clk                : in  std_logic := 'X'; -- clk
+			led_external_export    : out std_logic         -- export
+		);
+	end component nios_interface;
+

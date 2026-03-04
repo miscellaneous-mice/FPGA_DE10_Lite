@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+
+// Standard Byte Offsets
+#define REG_CTRL   0x0   // Control
+#define REG_COUNT  0x4   // Current Value
+#define REG_SPEED  0x8   // Speed Limit
+#define REG_MAX    0xC   // Max Count
+
+int main() {
+    printf("--- Final SoC System Initializing ---\n");
+
+    int hw_count = 0;
+    int buttons = 0;
+    int led_state = 0;
+    int loop_timer = 0;
+
+    // 1. Initial Setup of the Counter Hardware
+    // Set Speed to 2,500,000 (Faster count for testing - 20Hz)
+    IOWR_32DIRECT(PERIPHERAL_CTRL_AVALON_COUNTER_INTERFACE_BASE, REG_SPEED, 2500000);
+
+    // Set Max Limit to 999,999
+    IOWR_32DIRECT(PERIPHERAL_CTRL_AVALON_COUNTER_INTERFACE_BASE, REG_MAX, 999999);
+
+    // START the counter (Bit 0 = 1)
+    IOWR_32DIRECT(PERIPHERAL_CTRL_AVALON_COUNTER_INTERFACE_BASE, REG_CTRL, 0x1);
+
+    printf("Hardware Counter Started...\n");
+
+    while (1) {
+        // --- 2. Button Handling (KEY0) ---
+        buttons = IORD_32DIRECT(IO_PERIPHERALS_BUTTON_PIO_BASE, 0);
+
+        if ((buttons & 0x01) == 0) { // KEY0 pressed
+            printf("KEY0 Pressed: Resetting Counter\n");
+
+            // Pulse the hardware Soft Reset (Bit 1)
+            IOWR_32DIRECT(PERIPHERAL_CTRL_AVALON_COUNTER_INTERFACE_BASE, REG_CTRL, 0x3);
+            IOWR_32DIRECT(PERIPHERAL_CTRL_AVALON_COUNTER_INTERFACE_BASE, REG_CTRL, 0x1);
+
+            usleep(200000); // Debounce delay
+        }
+
+        // --- 3. Read Hardware State ---
+        hw_count = IORD_32DIRECT(PERIPHERAL_CTRL_AVALON_COUNTER_INTERFACE_BASE, REG_COUNT);
+
+        // --- 4. Update Display ---
+        // Push the count value into the Hex Decoder hardware
+        IOWR_32DIRECT(IO_PERIPHERALS_AVALON_HEX_PIO_BASE, 0, hw_count);
+//        IOWR_32DIRECT(IO_PERIPHERALS_AVALON_HEX_PIO_BASE, 0, 0x123456);
+
+        // --- 5. Background Heartbeat (LED and Print) ---
+        loop_timer++;
+        if (loop_timer >= 500) { // Roughly every 500ms
+            led_state = !led_state;
+            IOWR_32DIRECT(IO_PERIPHERALS_LED_PIO_BASE, 0, led_state);
+
+            // Debugging info to the PC console
+            printf("Status | Count: %d | Buttons: %d\n", hw_count, buttons);
+            loop_timer = 0;
+        }
+
+        usleep(1000); // 1ms sleep
+    }
+
+    return 0;
+}

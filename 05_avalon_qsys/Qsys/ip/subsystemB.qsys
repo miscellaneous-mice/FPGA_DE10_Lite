@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags=""
+   categories="" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element button_pio
+   {
+      datum _sortIndex
+      {
+         value = "3";
+         type = "int";
+      }
+   }
+   element button_pio.s1
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
+   element clock_bridge
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+   }
+   element counter
+   {
+      datum _sortIndex
+      {
+         value = "1";
+         type = "int";
+      }
+   }
+   element counter.s0
+   {
+      datum baseAddress
+      {
+         value = "32";
+         type = "String";
+      }
+   }
+   element hex_display
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+   }
+   element hex_display.s0
+   {
+      datum baseAddress
+      {
+         value = "48";
+         type = "String";
+      }
+   }
+   element led_pio
+   {
+      datum _sortIndex
+      {
+         value = "2";
+         type = "int";
+      }
+   }
+   element led_pio.s1
+   {
+      datum baseAddress
+      {
+         value = "16";
+         type = "String";
+      }
+   }
+   element peripheral_bridge
+   {
+      datum _sortIndex
+      {
+         value = "4";
+         type = "int";
+      }
+   }
+   element reset_bridge
+   {
+      datum _sortIndex
+      {
+         value = "5";
+         type = "int";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="device" value="10M50DAF484C7G" />
+ <parameter name="deviceFamily" value="MAX 10" />
+ <parameter name="deviceSpeedGrade" value="7" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="false" />
+ <parameter name="lockedInterfaceDefinition" value="" />
+ <parameter name="maxAdditionalLatency" value="1" />
+ <parameter name="projectName" value="" />
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="false" />
+ <instanceScript></instanceScript>
+ <interface
+   name="button_interface"
+   internal="button_pio.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface name="clk" internal="clock_bridge.in_clk" type="clock" dir="end" />
+ <interface
+   name="hex_interface"
+   internal="hex_display.hex_interface"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="led_interface"
+   internal="led_pio.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface name="reset" internal="reset_bridge.in_reset" type="reset" dir="end" />
+ <interface name="s0" internal="peripheral_bridge.s0" type="avalon" dir="end" />
+ <module name="button_pio" kind="altera_avalon_pio" version="18.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="0" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="2" />
+ </module>
+ <module
+   name="clock_bridge"
+   kind="altera_clock_bridge"
+   version="18.1"
+   enabled="1">
+  <parameter name="DERIVED_CLOCK_RATE" value="0" />
+  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
+  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
+ </module>
+ <module
+   name="counter"
+   kind="avalon_counter_interface"
+   version="1.0"
+   enabled="1">
+  <parameter name="INITIAL_MAX_COUNT" value="100" />
+  <parameter name="INITIAL_SPEED" value="5000000" />
+ </module>
+ <module name="hex_display" kind="avalon_hex_pio" version="1.0" enabled="1" />
+ <module name="led_pio" kind="altera_avalon_pio" version="18.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="0" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="1" />
+ </module>
+ <module
+   name="peripheral_bridge"
+   kind="altera_avalon_mm_bridge"
+   version="18.1"
+   enabled="1">
+  <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
+  <parameter name="ADDRESS_WIDTH" value="10" />
+  <parameter name="DATA_WIDTH" value="32" />
+  <parameter name="LINEWRAPBURSTS" value="0" />
+  <parameter name="MAX_BURST_SIZE" value="1" />
+  <parameter name="MAX_PENDING_RESPONSES" value="4" />
+  <parameter name="PIPELINE_COMMAND" value="1" />
+  <parameter name="PIPELINE_RESPONSE" value="1" />
+  <parameter name="SYMBOL_WIDTH" value="8" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="6" />
+  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="0" />
+  <parameter name="USE_RESPONSE" value="0" />
+ </module>
+ <module
+   name="reset_bridge"
+   kind="altera_reset_bridge"
+   version="18.1"
+   enabled="1">
+  <parameter name="ACTIVE_LOW_RESET" value="0" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="0" />
+  <parameter name="NUM_RESET_OUTPUTS" value="1" />
+  <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
+  <parameter name="USE_RESET_REQUEST" value="0" />
+ </module>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="peripheral_bridge.m0"
+   end="hex_display.s0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0030" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="peripheral_bridge.m0"
+   end="counter.s0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0020" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="peripheral_bridge.m0"
+   end="led_pio.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0010" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="peripheral_bridge.m0"
+   end="button_pio.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="reset_bridge.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="peripheral_bridge.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="button_pio.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="led_pio.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="counter.clock" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clock_bridge.out_clk"
+   end="hex_display.clock" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="peripheral_bridge.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="button_pio.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="led_pio.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="counter.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="reset_bridge.out_reset"
+   end="hex_display.reset" />
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
+</system>

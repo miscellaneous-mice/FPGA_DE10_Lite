@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy
+ date="2026.03.04.17:39:51"
+ outputDirectory="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/peripheral_interface/">
+ <perimeter>
+  <parameter
+     name="AUTO_GENERATION_ID"
+     type="Integer"
+     defaultValue="0"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_UNIQUE_ID"
+     type="String"
+     defaultValue=""
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_FAMILY"
+     type="String"
+     defaultValue="MAX 10"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE"
+     type="String"
+     defaultValue="10M50DAF484C7G"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_SPEEDGRADE"
+     type="String"
+     defaultValue="7"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLK_CLOCK_RATE"
+     type="Long"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLK_CLOCK_DOMAIN"
+     type="Integer"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLK_RESET_DOMAIN"
+     type="Integer"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <interface name="clk" kind="clock" start="0">
+   <property name="clockRate" value="50000000" />
+   <property name="externallyDriven" value="false" />
+   <property name="ptfSchematicName" value="" />
+   <port name="clk_clk" direction="input" role="clk" width="1" />
+  </interface>
+  <interface name="full_adder_signals" kind="conduit" start="0">
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port
+       name="full_adder_signals_fa_a"
+       direction="input"
+       role="fa_a"
+       width="4" />
+   <port
+       name="full_adder_signals_fa_b"
+       direction="input"
+       role="fa_b"
+       width="4" />
+   <port
+       name="full_adder_signals_fa_sum"
+       direction="output"
+       role="fa_sum"
+       width="4" />
+   <port
+       name="full_adder_signals_fa_carry"
+       direction="output"
+       role="fa_carry"
+       width="1" />
+  </interface>
+  <interface name="hex0_display_signals" kind="conduit" start="0">
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port
+       name="hex0_display_signals_input"
+       direction="input"
+       role="input"
+       width="4" />
+   <port
+       name="hex0_display_signals_output"
+       direction="output"
+       role="output"
+       width="8" />
+  </interface>
+  <interface name="hex1_display_signals" kind="conduit" start="0">
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port
+       name="hex1_display_signals_input"
+       direction="input"
+       role="input"
+       width="4" />
+   <port
+       name="hex1_display_signals_output"
+       direction="output"
+       role="output"
+       width="8" />
+  </interface>
+  <interface name="key_deboucer_signals" kind="conduit" start="0">
+   <property name="associatedClock" value="clk" />
+   <property name="associatedReset" value="" />
+   <port
+       name="key_deboucer_signals_input"
+       direction="input"
+       role="input"
+       width="1" />
+   <port
+       name="key_deboucer_signals_output"
+       direction="output"
+       role="output"
+       width="1" />
+  </interface>
+  <interface name="reset" kind="reset" start="0">
+   <property name="associatedClock" value="" />
+   <property name="synchronousEdges" value="NONE" />
+   <port name="reset_reset_n" direction="input" role="reset_n" width="1" />
+  </interface>
+ </perimeter>
+ <entity
+   path=""
+   parameterizationKey="peripheral_interface:1.0:AUTO_CLK_CLOCK_DOMAIN=-1,AUTO_CLK_CLOCK_RATE=-1,AUTO_CLK_RESET_DOMAIN=-1,AUTO_DEVICE=10M50DAF484C7G,AUTO_DEVICE_FAMILY=MAX 10,AUTO_DEVICE_SPEEDGRADE=7,AUTO_GENERATION_ID=1772626191,AUTO_UNIQUE_ID=(clock_source:18.1:clockFrequency=50000000,clockFrequencyKnown=true,inputClockFrequency=0,resetSynchronousEdges=NONE)(full_adder_4bit:1.0:)(hex_display:1.0:)(hex_display:1.0:)(key_register:1.0:)(clock:18.1:)"
+   instancePathKey="peripheral_interface"
+   kind="peripheral_interface"
+   version="1.0"
+   name="peripheral_interface">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_GENERATION_ID" value="1772626191" />
+  <parameter name="AUTO_DEVICE" value="10M50DAF484C7G" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_UNIQUE_ID" value="" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="7" />
+  <generatedFiles>
+   <file
+       path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/peripheral_interface/synthesis/peripheral_interface.v"
+       type="VERILOG" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/peripheral_interface/synthesis/submodules/full_adder_4bit.v"
+       type="VERILOG"
+       attributes="TOP_LEVEL_FILE" />
+   <file
+       path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/peripheral_interface/synthesis/submodules/hex_disp.v"
+       type="VERILOG"
+       attributes="TOP_LEVEL_FILE" />
+   <file
+       path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/peripheral_interface/synthesis/submodules/key_register.v"
+       type="VERILOG"
+       attributes="TOP_LEVEL_FILE" />
+  </childGeneratedFiles>
+  <sourceFiles>
+   <file
+       path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/peripheral_interface.qsys" />
+  </sourceFiles>
+  <childSourceFiles>
+   <file path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/full_adder_4bit_hw.tcl" />
+   <file path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/hex_display_hw.tcl" />
+   <file path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/key_register_hw.tcl" />
+  </childSourceFiles>
+  <messages>
+   <message level="Debug" culprit="peripheral_interface">queue size: 0 starting:peripheral_interface "peripheral_interface"</message>
+   <message level="Progress" culprit="min"></message>
+   <message level="Progress" culprit="max"></message>
+   <message level="Progress" culprit="current"></message>
+   <message level="Debug">Transform: CustomInstructionTransform</message>
+   <message level="Debug">No custom instruction connections, skipping transform </message>
+   <message level="Debug" culprit="merlin_custom_instruction_transform"><![CDATA[After transform: <b>5</b> modules, <b>1</b> connections]]></message>
+   <message level="Debug">Transform: MMTransform</message>
+   <message level="Debug">Transform: InterruptMapperTransform</message>
+   <message level="Debug">Transform: InterruptSyncTransform</message>
+   <message level="Debug">Transform: InterruptFanoutTransform</message>
+   <message level="Debug">Transform: AvalonStreamingTransform</message>
+   <message level="Debug">Transform: ResetAdaptation</message>
+   <message level="Debug" culprit="peripheral_interface"><![CDATA["<b>peripheral_interface</b>" reuses <b>full_adder_4bit</b> "<b>submodules/full_adder_4bit</b>"]]></message>
+   <message level="Debug" culprit="peripheral_interface"><![CDATA["<b>peripheral_interface</b>" reuses <b>hex_display</b> "<b>submodules/HexDigit_Decoder</b>"]]></message>
+   <message level="Debug" culprit="peripheral_interface"><![CDATA["<b>peripheral_interface</b>" reuses <b>hex_display</b> "<b>submodules/HexDigit_Decoder</b>"]]></message>
+   <message level="Debug" culprit="peripheral_interface"><![CDATA["<b>peripheral_interface</b>" reuses <b>key_register</b> "<b>submodules/key_debounce</b>"]]></message>
+   <message level="Debug" culprit="peripheral_interface">queue size: 3 starting:full_adder_4bit "submodules/full_adder_4bit"</message>
+   <message level="Info" culprit="full_adder_4bit_0"><![CDATA["<b>peripheral_interface</b>" instantiated <b>full_adder_4bit</b> "<b>full_adder_4bit_0</b>"]]></message>
+   <message level="Debug" culprit="peripheral_interface">queue size: 2 starting:hex_display "submodules/HexDigit_Decoder"</message>
+   <message level="Info" culprit="hex_display_0"><![CDATA["<b>peripheral_interface</b>" instantiated <b>hex_display</b> "<b>hex_display_0</b>"]]></message>
+   <message level="Debug" culprit="peripheral_interface">queue size: 0 starting:key_register "submodules/key_debounce"</message>
+   <message level="Info" culprit="key_register_0"><![CDATA["<b>peripheral_interface</b>" instantiated <b>key_register</b> "<b>key_register_0</b>"]]></message>
+  </messages>
+ </entity>
+ <entity
+   path="submodules/"
+   parameterizationKey="full_adder_4bit:1.0:"
+   instancePathKey="peripheral_interface:.:full_adder_4bit_0"
+   kind="full_adder_4bit"
+   version="1.0"
+   name="full_adder_4bit">
+  <generatedFiles>
+   <file
+       path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/peripheral_interface/synthesis/submodules/full_adder_4bit.v"
+       type="VERILOG"
+       attributes="TOP_LEVEL_FILE" />
+  </generatedFiles>
+  <childGeneratedFiles/>
+  <sourceFiles>
+   <file path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/full_adder_4bit_hw.tcl" />
+  </sourceFiles>
+  <childSourceFiles/>
+  <instantiator instantiator="peripheral_interface" as="full_adder_4bit_0" />
+  <messages>
+   <message level="Debug" culprit="peripheral_interface">queue size: 3 starting:full_adder_4bit "submodules/full_adder_4bit"</message>
+   <message level="Info" culprit="full_adder_4bit_0"><![CDATA["<b>peripheral_interface</b>" instantiated <b>full_adder_4bit</b> "<b>full_adder_4bit_0</b>"]]></message>
+  </messages>
+ </entity>
+ <entity
+   path="submodules/"
+   parameterizationKey="hex_display:1.0:"
+   instancePathKey="peripheral_interface:.:hex_display_0"
+   kind="hex_display"
+   version="1.0"
+   name="HexDigit_Decoder">
+  <generatedFiles>
+   <file
+       path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/peripheral_interface/synthesis/submodules/hex_disp.v"
+       type="VERILOG"
+       attributes="TOP_LEVEL_FILE" />
+  </generatedFiles>
+  <childGeneratedFiles/>
+  <sourceFiles>
+   <file path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/hex_display_hw.tcl" />
+  </sourceFiles>
+  <childSourceFiles/>
+  <instantiator instantiator="peripheral_interface" as="hex_display_0,hex_display_1" />
+  <messages>
+   <message level="Debug" culprit="peripheral_interface">queue size: 2 starting:hex_display "submodules/HexDigit_Decoder"</message>
+   <message level="Info" culprit="hex_display_0"><![CDATA["<b>peripheral_interface</b>" instantiated <b>hex_display</b> "<b>hex_display_0</b>"]]></message>
+  </messages>
+ </entity>
+ <entity
+   path="submodules/"
+   parameterizationKey="key_register:1.0:"
+   instancePathKey="peripheral_interface:.:key_register_0"
+   kind="key_register"
+   version="1.0"
+   name="key_debounce">
+  <generatedFiles>
+   <file
+       path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/peripheral_interface/synthesis/submodules/key_register.v"
+       type="VERILOG"
+       attributes="TOP_LEVEL_FILE" />
+  </generatedFiles>
+  <childGeneratedFiles/>
+  <sourceFiles>
+   <file path="C:/Sandbox/FPGA_Clean/04_custom_ip/Qsys/key_register_hw.tcl" />
+  </sourceFiles>
+  <childSourceFiles/>
+  <instantiator instantiator="peripheral_interface" as="key_register_0" />
+  <messages>
+   <message level="Debug" culprit="peripheral_interface">queue size: 0 starting:key_register "submodules/key_debounce"</message>
+   <message level="Info" culprit="key_register_0"><![CDATA["<b>peripheral_interface</b>" instantiated <b>key_register</b> "<b>key_register_0</b>"]]></message>
+  </messages>
+ </entity>
+</deploy>

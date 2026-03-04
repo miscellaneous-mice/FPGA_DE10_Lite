@@ -1,0 +1,30 @@
+module avalon_interfacing (
+    input  wire        clk_50,
+    input  wire  [1:0] KEY,      // Map to KEY0, KEY1
+    output wire        fpga_led, // Map to LEDR0
+    output wire  [7:0] HEX0,     // Physical 7-Seg pins
+    output wire  [7:0] HEX1,
+    output wire  [7:0] HEX2,
+    output wire  [7:0] HEX3,
+    output wire  [7:0] HEX4,
+    output wire  [7:0] HEX5
+);
+
+    // Instantiate the Qsys system
+    // Port names are based on your Export column in Platform Designer
+    avalon_design u0 (
+        .clk_clk                        (clk_50),   
+        .button_interface_export         (KEY),
+        .led_interface_export            (fpga_led),
+        
+        // These signals are from your avalon_display_logic IP core
+        // Platform Designer usually appends the signal name to the conduit name
+        .hex_interface_hex_0     (HEX0),
+        .hex_interface_hex_1     (HEX1),
+        .hex_interface_hex_2     (HEX2),
+        .hex_interface_hex_3     (HEX3),
+        .hex_interface_hex_4     (HEX4),
+        .hex_interface_hex_5     (HEX5)
+    );
+
+endmodule

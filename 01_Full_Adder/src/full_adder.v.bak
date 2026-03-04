@@ -1,0 +1,101 @@
+module top_full_adder_hex (
+    input  wire        CLOCK_50,
+    input  wire [9:0]  SW,
+    input  wire [0:0]  KEY,
+    output wire [7:0]  HEX0,
+    output wire [7:0]  HEX1,
+    output wire [7:0]  HEX2,
+    output wire [7:0]  HEX3,
+    output wire [7:0]  HEX4,
+    output wire [7:0]  HEX5
+);
+
+    // =============================
+    // FSM States
+    // =============================
+    localparam READ_A = 2'd0,
+               READ_B = 2'd1,
+               SHOW   = 2'd2;
+
+    reg [1:0] state = READ_A;
+
+    // Stored inputs
+    reg a, b;
+
+    // Full Adder outputs
+    wire sum, carry;
+
+    // 4-bit values to feed decoder
+    reg [3:0] hex0_val;
+    reg [3:0] hex1_val;
+
+    // =============================
+    // Full Adder
+    // =============================
+    assign sum   = a ^ b;
+    assign carry = a & b;
+
+    // =============================
+    // KEY0 press detection (active-low)
+    // =============================
+    reg key_prev;
+    always @(posedge CLOCK_50)
+        key_prev <= KEY[0];
+
+    wire key_pressed = (key_prev == 1'b1) && (KEY[0] == 1'b0);
+
+    // =============================
+    // FSM Logic
+    // =============================
+    always @(posedge CLOCK_50) begin
+        if (key_pressed) begin
+            case (state)
+                READ_A: begin
+                    a <= SW[0];
+                    state <= READ_B;
+                end
+                READ_B: begin
+                    b <= SW[0];
+                    state <= SHOW;
+                end
+                SHOW: begin
+                    state <= READ_A;
+                end
+            endcase
+        end
+    end
+
+    // =============================
+    // Display Control
+    // =============================
+    always @(*) begin
+        hex0_val = 4'h0;
+        hex1_val = 4'h0;
+
+        case (state)
+            READ_A: begin
+                hex0_val = {3'b000, SW[0]};
+            end
+            READ_B: begin
+                hex0_val = {3'b000, SW[0]};
+            end
+            SHOW: begin
+                hex0_val = {3'b000, sum};
+                hex1_val = {3'b000, carry};
+            end
+        endcase
+    end
+
+    // =============================
+    // 7-Segment Decoders (YOUR CODE)
+    // =============================
+    HexDigit_Decoder d0 (.hex_input(hex0_val), .seg_output(HEX0));
+    HexDigit_Decoder d1 (.hex_input(hex1_val), .seg_output(HEX1));
+
+    // Turn off unused displays
+    assign HEX2 = 8'hFF;
+    assign HEX3 = 8'hFF;
+    assign HEX4 = 8'hFF;
+    assign HEX5 = 8'hFF;
+
+endmodule

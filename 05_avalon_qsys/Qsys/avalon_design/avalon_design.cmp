@@ -1,0 +1,14 @@
+	component avalon_design is
+		port (
+			button_interface_export : in  std_logic_vector(1 downto 0) := (others => 'X'); -- export
+			clk_clk                 : in  std_logic                    := 'X';             -- clk
+			hex_interface_hex_0     : out std_logic_vector(7 downto 0);                    -- hex_0
+			hex_interface_hex_1     : out std_logic_vector(7 downto 0);                    -- hex_1
+			hex_interface_hex_2     : out std_logic_vector(7 downto 0);                    -- hex_2
+			hex_interface_hex_3     : out std_logic_vector(7 downto 0);                    -- hex_3
+			hex_interface_hex_4     : out std_logic_vector(7 downto 0);                    -- hex_4
+			hex_interface_hex_5     : out std_logic_vector(7 downto 0);                    -- hex_5
+			led_interface_export    : out std_logic                                        -- export
+		);
+	end component avalon_design;
+

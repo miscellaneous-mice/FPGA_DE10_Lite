@@ -1,0 +1,24 @@
+# # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
+# 
+preplace inst nios_interface.NIOS_II.clock_bridge -pg 1
+preplace inst nios_interface.SYS_ID -pg 1 -lvl 4 -y 240
+preplace inst nios_interface.NIOS_II -pg 1 -lvl 1 -y 50
+preplace inst nios_interface.NIOS_II.reset_bridge -pg 1
+preplace inst nios_interface.SRAM -pg 1 -lvl 4 -y 160
+preplace inst nios_interface.DEBUG -pg 1 -lvl 4 -y 60
+preplace inst nios_interface.NIOS_II.cpu -pg 1
+preplace inst nios_interface.peripheral_bridge -pg 1 -lvl 3 -y 260
+preplace inst nios_interface -pg 1 -lvl 1 -y 40 -regy -20
+preplace inst nios_interface.clk_0 -pg 1 -lvl 2 -y 240
+preplace inst nios_interface.led_pio -pg 1 -lvl 4 -y 320
+preplace inst nios_interface.button_pio -pg 1 -lvl 4 -y 420
+preplace netloc INTERCONNECT<net_container>nios_interface</net_container>(SLAVE)led_pio.reset,(SLAVE)peripheral_bridge.reset,(MASTER)NIOS_II.debug_reset_request,(SLAVE)SRAM.reset1,(SLAVE)clk_0.clk_in_reset,(SLAVE)button_pio.reset,(MASTER)clk_0.clk_reset,(SLAVE)DEBUG.reset,(SLAVE)NIOS_II.reset,(SLAVE)SYS_ID.reset) 1 0 4 180 210 560 120 780 230 1040
+preplace netloc POINT_TO_POINT<net_container>nios_interface</net_container>(SLAVE)DEBUG.irq,(MASTER)NIOS_II.irq) 1 1 3 NJ 140 NJ 140 980
+preplace netloc INTERCONNECT<net_container>nios_interface</net_container>(MASTER)NIOS_II.data_master,(SLAVE)DEBUG.avalon_jtag_slave,(SLAVE)NIOS_II.debug_mem_slave,(SLAVE)peripheral_bridge.s0,(SLAVE)SRAM.s1,(MASTER)NIOS_II.instruction_master,(SLAVE)SYS_ID.control_slave) 1 0 4 160 190 540 310 800 250 1020
+preplace netloc EXPORT<net_container>nios_interface</net_container>(SLAVE)nios_interface.button_external,(SLAVE)button_pio.external_connection) 1 0 4 NJ 450 NJ 450 NJ 450 NJ
+preplace netloc EXPORT<net_container>nios_interface</net_container>(SLAVE)nios_interface.led_external,(SLAVE)led_pio.external_connection) 1 0 4 NJ 350 NJ 350 NJ 350 NJ
+preplace netloc FAN_OUT<net_container>nios_interface</net_container>(SLAVE)button_pio.clk,(SLAVE)SYS_ID.clk,(MASTER)clk_0.clk,(SLAVE)led_pio.clk,(SLAVE)NIOS_II.clk,(SLAVE)DEBUG.clk,(SLAVE)peripheral_bridge.clk,(SLAVE)SRAM.clk1) 1 0 4 140 230 NJ 230 760 210 1000
+preplace netloc EXPORT<net_container>nios_interface</net_container>(SLAVE)nios_interface.clk,(SLAVE)clk_0.clk_in) 1 0 2 NJ 250 NJ
+preplace netloc FAN_OUT<net_container>nios_interface</net_container>(MASTER)peripheral_bridge.m0,(SLAVE)led_pio.s1,(SLAVE)button_pio.s1) 1 3 1 980
+levelinfo -pg 1 0 110 1230
+levelinfo -hier nios_interface 120 300 590 860 1070 1220

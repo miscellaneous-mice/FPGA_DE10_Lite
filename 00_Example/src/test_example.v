@@ -1,0 +1,65 @@
+module test_example(
+	 input        clk,
+    input  [9:0] SW,        // The 10 Slide Switches
+    output [7:0] HEX0,      // 7-Seg Display 0 (Rightmost)
+    output [7:0] HEX1,      // 7-Seg Display 1
+    output [7:0] HEX2,      // 7-Seg Display 2
+    output [7:0] HEX3,      // 7-Seg Display 3
+    output [7:0] HEX4,      // 7-Seg Display 4
+    output [7:0] HEX5       // 7-Seg Display 5 (Leftmost)
+);
+
+    // Instantiate the decoder for the first digit (controlled by SW 0-3)
+    HexDigit_Decoder u0 (
+        .hex_input(SW[3:0]),
+        .seg_output(HEX0)
+    );
+
+    // Instantiate the decoder for the second digit (controlled by SW 4-7)
+    HexDigit_Decoder u1 (
+        .hex_input(SW[7:4]),
+        .seg_output(HEX1)
+    );
+
+    // Turn off the unused displays (Active Low: 1 = OFF, 0 = ON)
+    assign HEX2 = 8'hFF;
+    assign HEX3 = 8'hFF;
+    assign HEX4 = 8'hFF;
+    assign HEX5 = 8'hFF;
+
+endmodule
+
+
+// =============================================================
+// Sub-Module: Converts 4-bit binary to 7-segment patterns
+// =============================================================
+module HexDigit_Decoder(
+    input [3:0] hex_input,
+    output reg [7:0] seg_output
+);
+    // The DE10-Lite displays are "Active Low".
+    // 0 turns a segment ON. 1 turns a segment OFF.
+    // Mapping: {DP, g, f, e, d, c, b, a}
+    always @(*) begin
+        case(hex_input)
+            //                        DP g f e d c b a
+            4'h0: seg_output = 8'b11000000; // 0
+            4'h1: seg_output = 8'b11111001; // 1
+            4'h2: seg_output = 8'b10100100; // 2
+            4'h3: seg_output = 8'b10110000; // 3
+            4'h4: seg_output = 8'b10011001; // 4
+            4'h5: seg_output = 8'b10010010; // 5
+            4'h6: seg_output = 8'b10000010; // 6
+            4'h7: seg_output = 8'b11111000; // 7
+            4'h8: seg_output = 8'b10000000; // 8
+            4'h9: seg_output = 8'b10010000; // 9
+            4'hA: seg_output = 8'b10001000; // A
+            4'hB: seg_output = 8'b10000011; // b (lowercase to distinguish from 8)
+            4'hC: seg_output = 8'b11000110; // C
+            4'hD: seg_output = 8'b10100001; // d (lowercase to distinguish from 0)
+            4'hE: seg_output = 8'b10000110; // E
+            4'hF: seg_output = 8'b10001110; // F
+            default: seg_output = 8'b11111111; // OFF
+        endcase
+    end
+endmodule
