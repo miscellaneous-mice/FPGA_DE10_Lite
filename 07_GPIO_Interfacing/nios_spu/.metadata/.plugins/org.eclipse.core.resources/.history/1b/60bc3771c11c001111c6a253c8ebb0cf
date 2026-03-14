@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>     // For usleep()
+#include "system.h"     // Contains your hardware base addresses
+#include "io.h"         // Contains IORD and IOWR macros
+
+// Define the register byte offsets based on the Verilog we created earlier
+#define GPIO_DATA_LOW_OFFSET   0   // Read/Write bits 0-31
+#define GPIO_DATA_HIGH_OFFSET  4   // Read/Write bits 32-35
+#define GPIO_DIR_LOW_OFFSET    8   // Direction bits 0-31 (0=Input, 1=Output)
+#define GPIO_DIR_HIGH_OFFSET   12  // Direction bits 32-35 (0=Input, 1=Output)
+
+int main()
+{
+    printf("Starting 36-bit GPIO Monitor...\n");
+
+    // 1. Configure all 36 pins as INPUTS
+    // Writing 0 to the Direction registers sets the pins to High-Z (Input) mode
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_PIO_BASE, GPIO_DIR_LOW_OFFSET, 0x00000000);
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_PIO_BASE, GPIO_DIR_HIGH_OFFSET, 0x00000000);
+
+    uint32_t gpio_low;
+    uint32_t gpio_high;
+
+    while(1)
+    {
+        // 2. Read the current state of the pins
+        gpio_low  = IORD_32DIRECT(GPIO_AVALON_GPIO_PIO_BASE, GPIO_DATA_LOW_OFFSET);
+        gpio_high = IORD_32DIRECT(GPIO_AVALON_GPIO_PIO_BASE, GPIO_DATA_HIGH_OFFSET);
+
+        // Mask the high bits just to be safe (we only have 4 valid bits here: 32, 33, 34, 35)
+        gpio_high = gpio_high & 0x0000000F;
+
+        // 3. Print the state to the console
+        // We print the 4 upper bits, followed by the 32 lower bits in Hexadecimal format
+        printf("Current GPIO State: 0x%1X_%08X\n", gpio_high, gpio_low);
+
+        // Optional: If you want to check a specific pin (e.g., GPIO[5])
+        // uint8_t pin_5_state = (gpio_low >> 5) & 0x01;
+        // printf("Pin 5 is: %d\n", pin_5_state);
+
+        // Delay for 500 milliseconds so we don't flood the console
+        usleep(500000);
+    }
+
+    return 0;
+}

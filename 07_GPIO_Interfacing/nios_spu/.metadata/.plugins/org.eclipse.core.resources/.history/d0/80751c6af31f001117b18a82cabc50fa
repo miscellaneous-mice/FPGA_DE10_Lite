@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+#include "altera_msgdma.h"
+#include "altera_msgdma_descriptor_regs.h"
+
+// This mask (Bit 31) tells Nios II to ignore the Cache and read physical SDRAM.
+#define CACHE_BYPASS_MASK 0x80000000
+#define UNCACHED(addr) ((void*)((uint32_t)(addr) | CACHE_BYPASS_MASK))
+
+int main()
+{
+    printf("--- Diagnostic: Peripheral Bus Test ---\n");
+
+    // STEP 1: Direct CPU Read Test
+    // If this works, your Verilog, Pins, and Qsys Bridge are 100% OK.
+    uint32_t raw_key = IORD_32DIRECT(IO_MODULES_AVALON_KEY_PIO_BASE, 0);
+    printf("Test 1 (Direct): Initial Key State is 0x%08X\n", (unsigned int)raw_key);
+
+    // STEP 2: DMA Setup
+    alt_msgdma_dev *dma_io = alt_msgdma_open(DMA_IO_CSR_NAME);
+    if (!dma_io) { printf("Error: DMA_IO not found!\n"); return -1; }
+
+    alt_msgdma_standard_descriptor desc;
+    volatile uint32_t key_buffer = 0; // Use a dedicated buffer
+
+    while(1)
+    {
+        // STEP 3: Perform DMA Transfer
+        // We read 4 bytes from the Key Peripheral to our SDRAM buffer
+        alt_msgdma_construct_standard_mm_to_mm_descriptor(
+            dma_io, &desc,
+            (uint32_t *)IO_MODULES_AVALON_KEY_PIO_BASE,
+            (uint32_t *)&key_buffer,
+            4,
+            ALTERA_MSGDMA_DESCRIPTOR_CONTROL_PARK_READS_MASK | (1 << 31) // GO bit
+        );
+
+        // Blocking call: polls the DMA status register
+        alt_msgdma_standard_descriptor_sync_transfer(dma_io, &desc);
+
+        // STEP 4: Read through Cache Bypass
+        // If you don't use UNCACHED(), the CPU reads '0' from its own cache!
+        uint32_t actual_key = IORD_32DIRECT(UNCACHED(&key_buffer), 0);
+
+        if (actual_key & 0x01) {
+            printf("SUCCESS: KEY0 detected via DMA! Value: 0x%08X\n", (unsigned int)actual_key);
+            usleep(250000); // Debounce delay
+        }
+
+        usleep(10000); // 10ms poll
+    }
+    return 0;
+}

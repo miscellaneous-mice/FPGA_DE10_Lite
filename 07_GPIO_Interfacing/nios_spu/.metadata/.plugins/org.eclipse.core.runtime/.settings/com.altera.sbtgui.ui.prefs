@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+newSoftwareExampleWizardPage.defaultLocation=C\:\\Sandbox\\FPGA\\07_GPIO_Interfacing\\Qsys\\software\\signal_capture
+newSoftwareExampleWizardPage.sopcinfoFile=C\:\\Sandbox\\FPGA\\07_GPIO_Interfacing\\Qsys\\signal_analyzer.sopcinfo
+newSoftwareExampleWizardPage2.newBspLocation=C\:\\Sandbox\\FPGA\\07_GPIO_Interfacing\\Qsys\\software\\signal_capture_bsp

@@ -1,0 +1,95 @@
+//#include <stdio.h>
+//#include <stdint.h>
+//#include <unistd.h>
+//#include "system.h"
+//#include "io.h"
+//#include "altera_msgdma.h"
+//#include "altera_msgdma_descriptor_regs.h"
+//#include "sys/alt_cache.h"
+//
+//// Mapping "Fixed Address" to the PARK bits found in your header file
+//#define MSGDMA_READ_FIXED_ADDRESS   ALTERA_MSGDMA_DESCRIPTOR_CONTROL_PARK_READS_MASK
+//#define MSGDMA_WRITE_FIXED_ADDRESS  ALTERA_MSGDMA_DESCRIPTOR_CONTROL_PARK_WRITES_MASK
+//
+//// Busy bit is bit 0 of the Status Register
+//#ifndef MSGDMA_CSR_STATUS_BUSY_MASK
+//    #define MSGDMA_CSR_STATUS_BUSY_MASK (1 << 0)
+//#endif
+//
+//// Buffer variables in SDRAM for DMA to move data into/out of
+//volatile uint32_t sw_val  __attribute__ ((aligned (32)));
+//volatile uint32_t key_val __attribute__ ((aligned (32)));
+//
+//int main()
+//{
+//    printf("Logic Analyzer Control System Initialized...\n");
+//
+//    // 1. Open the mSGDMA device for Peripherals
+//    alt_msgdma_dev *dma_io = alt_msgdma_open(DMA_IO_CSR_NAME);
+//    if (!dma_io) {
+//        printf("Error: Could not open DMA_IO!\n");
+//        return -1;
+//    }
+//
+//    // 2. Configure GPIO bits 0-31 as Outputs (Offset 8) using Avalon-MM
+//    IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, 8, 0xFFFFFFFF);
+//
+//    alt_msgdma_standard_descriptor desc;
+//
+//    while(1)
+//    {
+//        // --- STEP A: Read KEY[0] using DMA ---
+//        alt_dcache_flush_all();
+//        alt_msgdma_construct_standard_mm_to_mm_descriptor(
+//            dma_io, &desc,
+//            (uint32_t *)IO_MODULES_AVALON_KEY_PIO_BASE, // Source (Fixed)
+//            (uint32_t *)&key_val,                       // Destination (Memory)
+//            4,                                          // 4 bytes
+//            MSGDMA_READ_FIXED_ADDRESS                   // Don't increment Key address
+//        );
+//        alt_msgdma_standard_descriptor_async_transfer(dma_io, &desc);
+//        // Wait for DMA using direct CSR status read
+//        while (IORD_32DIRECT(dma_io->csr_base, 0) & MSGDMA_CSR_STATUS_BUSY_MASK);
+//
+//        // Check if KEY0 is pressed (Bit 0)
+//        if (key_val & 0x01)
+//        {
+//            printf("KEY0 Pressed! Executing DMA Transfers...\n");
+//
+//            // --- STEP B: Read SW values into SDRAM using DMA ---
+//            alt_msgdma_construct_standard_mm_to_mm_descriptor(
+//                dma_io, &desc,
+//                (uint32_t *)IO_MODULES_AVALON_SW_PIO_BASE, // Source (Fixed)
+//                (uint32_t *)&sw_val,                      // Destination (Memory)
+//                4,                                        // 4 bytes
+//                MSGDMA_READ_FIXED_ADDRESS
+//            );
+//            alt_msgdma_standard_descriptor_async_transfer(dma_io, &desc);
+//            while (IORD_32DIRECT(dma_io->csr_base, 0) & MSGDMA_CSR_STATUS_BUSY_MASK);
+//
+//            // --- STEP C: Write value to GPIO using Avalon Memory Mapped (Direct) ---
+//            // Write the 10-bit switch value to physical GPIO header
+//            IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, 0, sw_val);
+//
+//            // --- STEP D: Write value to HEX Display using DMA ---
+//            alt_dcache_flush_all(); // Ensure DMA sees the latest 'sw_val' in SDRAM
+//            alt_msgdma_construct_standard_mm_to_mm_descriptor(
+//                dma_io, &desc,
+//                (uint32_t *)&sw_val,                       // Source (Memory)
+//                (uint32_t *)IO_MODULES_AVALON_HEX_PIO_BASE,// Destination (Fixed)
+//                4,                                         // 4 bytes
+//                MSGDMA_WRITE_FIXED_ADDRESS                 // Don't increment Hex address
+//            );
+//            alt_msgdma_standard_descriptor_async_transfer(dma_io, &desc);
+//            while (IORD_32DIRECT(dma_io->csr_base, 0) & MSGDMA_CSR_STATUS_BUSY_MASK);
+//
+//            printf("Captured Switches: 0x%03X -> Dispatched to GPIO and HEX.\n", (unsigned int)sw_val);
+//
+//            usleep(250000); // 250ms Debounce delay
+//        }
+//
+//        usleep(10000); // Small 10ms loop delay
+//    }
+//
+//    return 0;
+//}

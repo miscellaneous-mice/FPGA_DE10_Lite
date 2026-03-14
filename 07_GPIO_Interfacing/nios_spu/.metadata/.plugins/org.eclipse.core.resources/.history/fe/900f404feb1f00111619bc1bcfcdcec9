@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+#include "altera_msgdma.h"
+
+// Set GPIO Direction Register Offset
+#define GPIO_DIR_LOW_OFFSET 8
+
+// We will use an absolute, physical address exactly halfway through your 64MB SDRAM.
+// This completely eliminates any CPU Cache or Linker (.bss section) issues!
+#define DMA_TEST_ADDRESS (SDRAM_BASE + 0x02000000)
+
+int main()
+{
+    printf("=== DMA Hardware Diagnostic Test ===\n");
+
+    // 1. Force the GPIO pins to be INPUTS via Avalon-MM
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, GPIO_DIR_LOW_OFFSET, 0x00000000);
+
+    // 2. Open the DMA using the exact name from your system.h
+    alt_msgdma_dev *dma_dev = alt_msgdma_open(GPIO_DMA_CSR_NAME);
+    if (!dma_dev) {
+        printf("ERROR: mSGDMA not found! Check Qsys names.\n");
+        return -1;
+    }
+
+    alt_msgdma_standard_descriptor desc;
+
+    while(1)
+    {
+        // 3. PRE-FILL the memory with "Garbage" using Cache-Bypassing writes.
+        // We write DEADBEEF to ensure the memory isn't just holding 0s from startup.
+        IOWR_32DIRECT(DMA_TEST_ADDRESS, 0, 0xDEADBEEF);
+        IOWR_32DIRECT(DMA_TEST_ADDRESS, 4, 0xBAADF00D);
+
+        // 4. Construct the ST-to-MM descriptor
+        alt_msgdma_construct_standard_st_to_mm_descriptor(
+            dma_dev,
+            &desc,
+            (uint32_t*)DMA_TEST_ADDRESS, // Absolute physical address
+            8,                           // 8 bytes (1 beat of 64-bit data)
+            0                            // Standard control flags
+        );
+
+        // 5. Fire DMA using the SYNCHRONOUS transfer.
+        // This function pushes the GO bit and blocks until the hardware finishes.
+        int status = alt_msgdma_standard_descriptor_sync_transfer(dma_dev, &desc);
+
+        // 6. Read back the memory using Cache-Bypassing reads!
+        // This guarantees we see what the DMA actually wrote to the physical SDRAM chips.
+        uint32_t read_low  = IORD_32DIRECT(DMA_TEST_ADDRESS, 0);
+        uint32_t read_high = IORD_32DIRECT(DMA_TEST_ADDRESS, 4);
+
+        // --- DIAGNOSTIC ANALYSIS ---
+        printf("DMA Sync Status: %d | ", status);
+
+        if (read_low == 0xDEADBEEF) {
+            printf("FAIL: DMA did not write! (Memory is still DEADBEEF)\n");
+        }
+        else if (read_low == 0x00000000 && read_high == 0x00000000) {
+            printf("WARNING: DMA wrote successfully, but the Verilog stream is sending pure ZEROS.\n");
+        }
+        else {
+            printf("SUCCESS! Valid Data Received: 0x%08X_%08X\n", (unsigned int)read_high, (unsigned int)read_low);
+        }
+
+        // 7. Extract Pins exactly like your working MM code
+        uint8_t led  = (read_low & (1 << 0)) ? 1 : 0;
+        uint8_t nss  = (read_low & (1 << 1)) ? 1 : 0;
+        uint8_t mosi = (read_low & (1 << 2)) ? 1 : 0;
+        uint8_t sck  = (read_low & (1 << 3)) ? 1 : 0;
+        uint8_t miso = (read_low & (1 << 4)) ? 1 : 0;
+
+        printf("Parsed Pins -> NSS: %d | SCK: %d | MOSI: %d | MISO: %d | LED: %d\n\n",
+                nss, sck, mosi, miso, led);
+
+        usleep(500000); // Wait half a second before capturing again
+    }
+
+    return 0;
+}

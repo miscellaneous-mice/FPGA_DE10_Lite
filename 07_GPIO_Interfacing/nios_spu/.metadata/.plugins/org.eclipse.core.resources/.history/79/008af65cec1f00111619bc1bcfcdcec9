@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+#include "altera_msgdma.h"
+#include "altera_msgdma_descriptor_regs.h"
+#include "sys/alt_cache.h"
+
+// Mapping "Fixed Address" to the PARK bits
+#define MSGDMA_READ_FIXED_ADDRESS   ALTERA_MSGDMA_DESCRIPTOR_CONTROL_PARK_READS_MASK
+#define MSGDMA_WRITE_FIXED_ADDRESS  ALTERA_MSGDMA_DESCRIPTOR_CONTROL_PARK_WRITES_MASK
+
+// Adding the GO mask to ensure the hardware fires immediately
+#ifndef MSGDMA_GO_MASK
+    #define MSGDMA_GO_MASK (1 << 31)
+#endif
+
+// Buffer variables in SDRAM for DMA to move data into/out of
+volatile uint32_t sw_val  __attribute__ ((aligned (32)));
+volatile uint32_t key_val __attribute__ ((aligned (32)));
+
+int main()
+{
+    printf("--- DMA Peripheral Control System Initialized ---\n");
+
+    // 1. Open the mSGDMA device
+    alt_msgdma_dev *dma_io = alt_msgdma_open(DMA_IO_CSR_NAME);
+    if (!dma_io) {
+        printf("Error: Could not open DMA_IO!\n");
+        return -1;
+    }
+
+    // 2. Configure GPIO bits 0-31 as Outputs (Offset 8) using Avalon-MM
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, 8, 0xFFFFFFFF);
+
+    alt_msgdma_standard_descriptor desc;
+
+    while(1)
+    {
+        // --- STEP A: Read KEY[0] using DMA ---
+        alt_msgdma_construct_standard_mm_to_mm_descriptor(
+            dma_io, &desc,
+            (uint32_t *)IO_MODULES_AVALON_KEY_PIO_BASE,
+            (uint32_t *)&key_val,
+            4,
+            (MSGDMA_READ_FIXED_ADDRESS | MSGDMA_GO_MASK) // Don't increment Key address
+        );
+        // Use synchronous transfer (Auto-waits for DMA to finish!)
+        alt_msgdma_standard_descriptor_sync_transfer(dma_io, &desc);
+
+        // CACHE BYPASS: Read the physical SDRAM to see what the DMA actually wrote
+        uint32_t actual_key = IORD_32DIRECT((uint32_t)&key_val, 0);
+
+        // Check if KEY0 is pressed (Bit 0)
+        if (actual_key & 0x01)
+        {
+            printf("KEY0 Pressed! Executing DMA Transfers...\n");
+
+            // --- STEP B: Read SW values into SDRAM using DMA ---
+            alt_msgdma_construct_standard_mm_to_mm_descriptor(
+                dma_io, &desc,
+                (uint32_t *)IO_MODULES_AVALON_SW_PIO_BASE,
+                (uint32_t *)&sw_val,
+                4,
+                (MSGDMA_READ_FIXED_ADDRESS | MSGDMA_GO_MASK)
+            );
+            alt_msgdma_standard_descriptor_sync_transfer(dma_io, &desc);
+
+            // CACHE BYPASS: Read the actual switch value from SDRAM
+            uint32_t actual_sw = IORD_32DIRECT((uint32_t)&sw_val, 0);
+
+            // --- STEP C: Write value to GPIO using Avalon Memory Mapped (Direct) ---
+            IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, 0, actual_sw);
+
+            // --- STEP D: Write value to HEX Display using DMA ---
+            // The DMA reads physical SDRAM, so it will automatically see the correct 'sw_val'
+            alt_msgdma_construct_standard_mm_to_mm_descriptor(
+                dma_io, &desc,
+                (uint32_t *)&sw_val,
+                (uint32_t *)IO_MODULES_AVALON_HEX_PIO_BASE,
+                4,
+                (MSGDMA_WRITE_FIXED_ADDRESS | MSGDMA_GO_MASK) // Don't increment Hex address
+            );
+            alt_msgdma_standard_descriptor_sync_transfer(dma_io, &desc);
+
+            printf("Captured Switches: 0x%03X -> Dispatched to GPIO and HEX.\n", (unsigned int)actual_sw);
+
+            usleep(250000); // 250ms Debounce delay
+        }
+
+        usleep(10000); // Small 10ms loop delay to prevent processor thrashing
+    }
+
+    return 0;
+}

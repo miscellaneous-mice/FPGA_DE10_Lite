@@ -1,0 +1,99 @@
+//#include <stdio.h>
+//#include <stdint.h>
+//#include <inttypes.h> // For 64-bit printf macros
+//#include <unistd.h>
+//#include "system.h"
+//#include "io.h"
+//#include "altera_msgdma.h"
+//#include "altera_msgdma_descriptor_regs.h"
+//#include "sys/alt_cache.h"
+//
+//// The mSGDMA Busy bit is bit 0 of the Status Register (Offset 0)
+//#ifndef MSGDMA_CSR_STATUS_BUSY_MASK
+//    #define MSGDMA_CSR_STATUS_BUSY_MASK (1 << 0)
+//#endif
+//
+//// GO bit to commit the descriptor
+//#ifndef MSGDMA_DESCRIPTOR_CONTROL_GO_MASK
+//    #define MSGDMA_DESCRIPTOR_CONTROL_GO_MASK (1 << 31)
+//#endif
+//
+//#define NUM_SAMPLES 10000
+//
+//// Allocate the buffer for 64-bit samples (36 pins + padding)
+//// Aligned to 64 bytes for optimal DMA performance
+//uint64_t capture_buffer[NUM_SAMPLES] __attribute__ ((aligned (64)));
+//
+//int main()
+//{
+//    printf("--- 36-Channel Hardware Logic Analyzer Initialized ---\n");
+//    printf("Sampling Rate: 50 MHz (1 sample every 20ns)\n");
+//    printf("Buffer Size: %d samples (%d bytes)\n", NUM_SAMPLES, NUM_SAMPLES * 8);
+//
+//    // 1. Open the mSGDMA using the name from your system.h: GPIO_DMA_CSR_NAME
+//    alt_msgdma_dev *dma_dev = alt_msgdma_open(GPIO_DMA_CSR_NAME);
+//    if (!dma_dev) {
+//        printf("Error: Could not open /dev/GPIO_DMA_csr! Check your Qsys names.\n");
+//        return -1;
+//    }
+//
+//    alt_msgdma_standard_descriptor desc;
+//
+//    while(1)
+//    {
+//        printf("\nReady. Press Enter to ARM the capture...");
+//        getchar();
+//
+//        // 2. Clear CPU cache before DMA starts to ensure fresh data later
+//        alt_dcache_flush_all();
+//
+//        printf("ARMED! Listening to GPIO pins...\n");
+//
+//        // 3. Construct the Streaming-to-Memory-Mapped descriptor
+//        // Control = 0 means no special flags (no interrupts, etc.)
+//        alt_msgdma_construct_standard_st_to_mm_descriptor(
+//            dma_dev,
+//            &desc,
+//            (uint32_t*)capture_buffer,
+//            (NUM_SAMPLES * 8), // Length must be in BYTES (8 bytes per uint64_t)
+//            MSGDMA_DESCRIPTOR_CONTROL_GO_MASK // Commit bit
+//        );
+//
+//        // 4. Start the transfer asynchronously
+//        alt_msgdma_standard_descriptor_async_transfer(dma_dev, &desc);
+//
+//        // 5. WAIT for DMA to finish by reading the CSR Status Register directly
+//        // This avoids the "undefined reference" linker error
+//        while (IORD_32DIRECT(dma_dev->csr_base, 0) & MSGDMA_CSR_STATUS_BUSY_MASK) {
+//            // Busy waiting for the 0.2ms capture to finish
+//        }
+//
+//        printf("Capture Complete! Processing data...\n\n");
+//
+//        uint64_t last_state = 0xFFFFFFFFFFFFFFFFULL; // Start with impossible state
+//
+//        // 6. Iterate through the buffer and perform "Edge Compression"
+//        for (int i = 0; i < NUM_SAMPLES; i++)
+//        {
+//            uint64_t current_state = capture_buffer[i];
+//
+//            // Only print if the signal state physically changed
+//            if (current_state != last_state)
+//            {
+//                // Each sample index represents 20 nanoseconds (0.02 microseconds)
+//                float timestamp_us = (float)i * 0.02f;
+//
+//                // Mask for the 36 valid pins (ignore the top 28 bits of padding)
+//                uint64_t gpio_only = current_state & 0x0000000FFFFFFFFFULL;
+//
+//                // Print timestamp and the 36 bits in Hexadecimal format
+//                printf("[%7.2f us] GPIO: 0x%09" PRIX64 "\n", timestamp_us, gpio_only);
+//
+//                last_state = current_state;
+//            }
+//        }
+//        printf("\nEnd of Capture.\n");
+//    }
+//
+//    return 0;
+//}

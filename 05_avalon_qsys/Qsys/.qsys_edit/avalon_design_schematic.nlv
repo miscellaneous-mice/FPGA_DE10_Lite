@@ -1,8 +1,32 @@
 # # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
 # 
-preplace inst unsaved.clk_0 -pg 1 -lvl 1 -y 30
-preplace inst unsaved -pg 1 -lvl 1 -y 40 -regy -20
-preplace netloc EXPORT<net_container>unsaved</net_container>(SLAVE)unsaved.reset,(SLAVE)clk_0.clk_in_reset) 1 0 1 NJ
-preplace netloc EXPORT<net_container>unsaved</net_container>(SLAVE)clk_0.clk_in,(SLAVE)unsaved.clk) 1 0 1 NJ
-levelinfo -pg 1 0 50 270
-levelinfo -hier unsaved 60 90 260
+preplace inst avalon_design.io_peripherals -pg 1 -lvl 3 -y 240
+preplace inst avalon_design.io_peripherals.button_pio -pg 1
+preplace inst avalon_design.mem_sys_subsystem.SYS_ID -pg 1
+preplace inst avalon_design.io_peripherals.reset_bridge -pg 1
+preplace inst avalon_design.mem_sys_subsystem.DEBUG -pg 1
+preplace inst avalon_design.mem_sys_subsystem -pg 1 -lvl 3 -y 60
+preplace inst avalon_design.io_peripherals.counter -pg 1
+preplace inst avalon_design.mem_sys_subsystem.SRAM -pg 1
+preplace inst avalon_design.NIOS_II.cpu -pg 1
+preplace inst avalon_design -pg 1 -lvl 1 -y 40 -regy -20
+preplace inst avalon_design.io_peripherals.led_pio -pg 1
+preplace inst avalon_design.io_peripherals.hex_display -pg 1
+preplace inst avalon_design.NIOS_II.reset_bridge -pg 1
+preplace inst avalon_design.io_peripherals.peripheral_bridge -pg 1
+preplace inst avalon_design.io_peripherals.clock_bridge -pg 1
+preplace inst avalon_design.NIOS_II -pg 1 -lvl 2 -y 70
+preplace inst avalon_design.mem_sys_subsystem.reset_bridge -pg 1
+preplace inst avalon_design.mem_sys_subsystem.clock_bridge -pg 1
+preplace inst avalon_design.clk_0 -pg 1 -lvl 1 -y 120
+preplace inst avalon_design.NIOS_II.clock_bridge -pg 1
+preplace netloc EXPORT<net_container>avalon_design</net_container>(SLAVE)io_peripherals.led_interface,(SLAVE)avalon_design.led_interface) 1 0 3 NJ 310 NJ 310 NJ
+preplace netloc EXPORT<net_container>avalon_design</net_container>(SLAVE)clk_0.clk_in,(SLAVE)avalon_design.clk) 1 0 1 NJ
+preplace netloc INTERCONNECT<net_container>avalon_design</net_container>(SLAVE)clk_0.clk_in_reset,(SLAVE)NIOS_II.reset,(MASTER)clk_0.clk_reset,(SLAVE)io_peripherals.reset,(SLAVE)mem_sys_subsystem.reset,(MASTER)NIOS_II.debug_reset_request) 1 0 3 140 190 360 210 720
+preplace netloc EXPORT<net_container>avalon_design</net_container>(SLAVE)avalon_design.button_interface,(SLAVE)io_peripherals.button_interface) 1 0 3 NJ 250 NJ 250 NJ
+preplace netloc INTERCONNECT<net_container>avalon_design</net_container>(SLAVE)NIOS_II.debug_mem_slave,(MASTER)NIOS_II.instruction_master,(MASTER)NIOS_II.data_master,(SLAVE)mem_sys_subsystem.DEBUG_avalon_jtag_slave,(SLAVE)mem_sys_subsystem.SRAM_s1,(SLAVE)mem_sys_subsystem.SYS_ID_control_slave,(SLAVE)io_peripherals.s0) 1 1 2 360 30 740
+preplace netloc FAN_OUT<net_container>avalon_design</net_container>(SLAVE)io_peripherals.clk,(MASTER)clk_0.clk,(SLAVE)mem_sys_subsystem.clk,(SLAVE)NIOS_II.clk) 1 1 2 340 230 780
+preplace netloc EXPORT<net_container>avalon_design</net_container>(SLAVE)io_peripherals.hex_interface,(SLAVE)avalon_design.hex_interface) 1 0 3 NJ 290 NJ 290 NJ
+preplace netloc POINT_TO_POINT<net_container>avalon_design</net_container>(MASTER)NIOS_II.irq,(SLAVE)mem_sys_subsystem.DEBUG_irq) 1 2 1 760
+levelinfo -pg 1 0 110 1070
+levelinfo -hier avalon_design 120 170 480 940 1060

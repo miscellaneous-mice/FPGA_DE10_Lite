@@ -1,0 +1,152 @@
+//#include <stdio.h>
+//#include <stdint.h>
+//#include <unistd.h>     // For usleep()
+//#include "system.h"     // Contains your hardware base addresses
+//#include "io.h"         // Contains IORD and IOWR macros
+//
+//// Register byte offsets
+//#define GPIO_DATA_LOW_OFFSET   0   // Read/Write bits 0-31
+//#define GPIO_DIR_LOW_OFFSET    8   // Direction bits 0-31 (0=Input, 1=Output)
+//
+//// Define bitmasks for the specific SPI pins
+//#define PIN_LED_STATUS (1 << 0)  // GPIO[0] - Bit 0
+//#define PIN_NSS        (1 << 1)  // GPIO[1] - Bit 1
+//#define PIN_MOSI       (1 << 2)  // GPIO[2] - Bit 2
+//#define PIN_SCK        (1 << 3)  // GPIO[3] - Bit 3
+//#define PIN_MISO       (1 << 4)  // GPIO[4] - Bit 4
+//
+//int main()
+//{
+//    printf("Starting SPI Pin Monitor...\n");
+//    printf("Waiting for signals from STM32...\n\n");
+//
+//    // 1. Configure all pins as INPUTS to safely monitor the lines
+//    // (If the FPGA is meant to *send* data back on MISO, you would set Bit 4 to '1' here,
+//    // but for purely monitoring/sniffing, keep them all as 0/Inputs).
+//    IOWR_32DIRECT(GPIO_AVALON_GPIO_PIO_BASE, GPIO_DIR_LOW_OFFSET, 0x00000000);
+//
+//    uint32_t gpio_val;
+//    uint8_t led, nss, mosi, sck, miso;
+//
+//    while(1)
+//    {
+//        // 2. Read the current state of all lower 32 pins
+//        gpio_val = IORD_32DIRECT(GPIO_AVALON_GPIO_PIO_BASE, GPIO_DATA_LOW_OFFSET);
+//
+//        // 3. Extract the individual pin states using bitwise AND
+//        // The ternary operator (? 1 : 0) ensures the variable is strictly 1 or 0
+//        led  = (gpio_val & PIN_LED_STATUS) ? 1 : 0;
+//        nss  = (gpio_val & PIN_NSS)        ? 1 : 0;
+//        mosi = (gpio_val & PIN_MOSI)       ? 1 : 0;
+//        sck  = (gpio_val & PIN_SCK)        ? 1 : 0;
+//        miso = (gpio_val & PIN_MISO)       ? 1 : 0;
+//
+//        // 4. Print the states to the console
+//        printf("NSS: %d | SCK: %d | MOSI: %d | MISO: %d | LED: %d\n",
+//                nss, sck, mosi, miso, led);
+//
+//        // 5. Delay to prevent flooding the JTAG UART console (100 milliseconds)
+//        usleep(100000);
+//    }
+//
+//    return 0;
+//}
+
+
+
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+#include "altera_msgdma.h"
+#include "altera_msgdma_descriptor_regs.h"
+#include "sys/alt_cache.h"
+
+// Register Offsets for your custom GPIO module
+#define GPIO_DATA_LOW_OFFSET   0
+#define GPIO_DIR_LOW_OFFSET    8
+
+// Shared variable in SDRAM to act as a buffer for DMA transfers
+// Aligned to 32 bytes for DMA compatibility
+volatile uint32_t shared_val __attribute__ ((aligned (32)));
+volatile uint32_t key_val    __attribute__ ((aligned (32)));
+
+int main()
+{
+    printf("System Initialized.\n");
+    printf("Operation: Press KEY0 to capture SW and update HEX (via DMA) and GPIO (via MM).\n");
+
+    // 1. Open the mSGDMA device for Peripherals (DMA_IO)
+    alt_msgdma_dev *dma_io = alt_msgdma_open(DMA_IO_CSR_NAME);
+    if (!dma_io) {
+        printf("Error: Could not open DMA_IO!\n");
+        return -1;
+    }
+
+    // 2. Configure GPIO pins 0-31 as Outputs using Avalon-MM direct write
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, GPIO_DIR_LOW_OFFSET, 0xFFFFFFFF);
+
+    alt_msgdma_standard_descriptor desc;
+
+    while(1)
+    {
+        // --- STEP A: Read KEY status using DMA ---
+        alt_dcache_flush_all();
+        alt_msgdma_construct_standard_mm_to_mm_descriptor(
+            dma_io, &desc,
+            (uint32_t *)IO_MODULES_AVALON_KEY_PIO_BASE, // Source: Key Register
+            (uint32_t *)&key_val,                       // Destination: SDRAM
+            4,                                          // 4 bytes
+			MSGDMA_DESCRIPTOR_CONTROL_WRITE_FIXED_ADDRESS_MASK // Stay on Key Reg
+        );
+        alt_msgdma_standard_descriptor_async_transfer(dma_io, &desc);
+        while (alt_msgdma_read_status(dma_io) & ALTERA_MSGDMA_CSR_BUSY_MASK);
+
+        // Check if KEY0 is pressed (Logic 1 because your Verilog inverts the active-low key)
+        if (key_val & 0x01)
+        {
+            printf("KEY0 Pressed! Capturing Switches...\n");
+
+            // --- STEP B: Read Switch values into SDRAM using DMA ---
+            alt_msgdma_construct_standard_mm_to_mm_descriptor(
+                dma_io, &desc,
+                (uint32_t *)IO_MODULES_AVALON_SW_PIO_BASE, // Source: Switch Reg
+                (uint32_t *)&shared_val,                  // Destination: SDRAM
+                4,                                        // 4 bytes
+				MSGDMA_DESCRIPTOR_CONTROL_WRITE_FIXED_ADDRESS_MASK
+            );
+            alt_msgdma_standard_descriptor_async_transfer(dma_io, &desc);
+            while (alt_msgdma_read_status(dma_io) & ALTERA_MSGDMA_CSR_BUSY_MASK);
+
+            // Now 'shared_val' contains the 10-bit switch value
+            printf("Switch Value Captured: 0x%03X\n", (unsigned int)shared_val);
+
+            // --- STEP C: Write value to GPIO using Avalon Memory Mapped (Direct) ---
+            // We write the captured switch value to the lower bits of the GPIO header
+            IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, GPIO_DATA_LOW_OFFSET, shared_val);
+
+            // --- STEP D: Write value to HEX Display using DMA ---
+            // We take the value back from SDRAM and push it to the HEX IP
+            alt_dcache_flush_all();
+            alt_msgdma_construct_standard_mm_to_mm_descriptor(
+                dma_io, &desc,
+                (uint32_t *)&shared_val,                  // Source: SDRAM
+                (uint32_t *)IO_MODULES_AVALON_HEX_PIO_BASE,// Destination: HEX Reg
+                4,                                        // 4 bytes
+				MSGDMA_DESCRIPTOR_CONTROL_WRITE_FIXED_ADDRESS_MASK // Stay on Hex Reg
+            );
+            alt_msgdma_standard_descriptor_async_transfer(dma_io, &desc);
+            while (alt_msgdma_read_status(dma_io) & ALTERA_MSGDMA_CSR_BUSY_MASK);
+
+            printf("Update Complete.\n\n");
+
+            // Debounce delay to prevent multiple triggers
+            usleep(200000);
+        }
+
+        usleep(10000); // Small loop delay
+    }
+
+    return 0;
+}

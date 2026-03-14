@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>     // For usleep()
+#include "system.h"
+#include "io.h"
+#include "altera_msgdma.h"
+#include "altera_msgdma_descriptor_regs.h"
+#include "sys/alt_cache.h" // For alt_remap_uncached
+
+// Register byte offsets for your GPIO module
+#define GPIO_DIR_LOW_OFFSET    8   // Direction bits 0-31 (0=Input, 1=Output)
+
+// Define bitmasks for the specific SPI pins
+#define PIN_LED_STATUS (1ULL << 0)  // GPIO[0] - Bit 0
+#define PIN_NSS        (1ULL << 1)  // GPIO[1] - Bit 1
+#define PIN_MOSI       (1ULL << 2)  // GPIO[2] - Bit 2
+#define PIN_SCK        (1ULL << 3)  // GPIO[3] - Bit 3
+#define PIN_MISO       (1ULL << 4)  // GPIO[4] - Bit 4
+
+// The mSGDMA Busy bit is bit 0 of the Status Register (Offset 0)
+#ifndef MSGDMA_CSR_STATUS_BUSY_MASK
+    #define MSGDMA_CSR_STATUS_BUSY_MASK (1 << 0)
+#endif
+
+// We only need 1 sample (64-bits / 8 bytes) per loop for continuous monitoring
+uint64_t dma_sample_buffer __attribute__ ((aligned (64)));
+
+int main()
+{
+    printf("Starting Continuous DMA SPI Pin Monitor...\n");
+    printf("Waiting for signals from STM32...\n\n");
+
+    // 1. Configure all pins as INPUTS via Avalon-MM (Crucial for getting real data!)
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, GPIO_DIR_LOW_OFFSET, 0x00000000);
+
+    // 2. Open the mSGDMA device
+    alt_msgdma_dev *dma_dev = alt_msgdma_open(GPIO_DMA_CSR_NAME);
+    if (!dma_dev) {
+        printf("Error: Could not open DMA! Check Qsys names.\n");
+        return -1;
+    }
+
+    // 3. Create an UNCACHED pointer to our buffer.
+    // This forces the Nios II to read the physical RAM instead of its internal cache.
+    // This solves the "0x000000" problem permanently!
+    volatile uint64_t *uncached_sample = (volatile uint64_t *)alt_remap_uncached(&dma_sample_buffer, sizeof(uint64_t));
+
+    alt_msgdma_standard_descriptor desc;
+    uint8_t led, nss, mosi, sck, miso;
+
+    while(1)
+    {
+        // 4. Construct descriptor to grab exactly 1 sample (8 bytes) from the stream
+        alt_msgdma_construct_standard_st_to_mm_descriptor(
+            dma_dev,
+            &desc,
+            (uint32_t*)uncached_sample, // Destination must be the physical/uncached address!
+            8,                          // Length: 8 bytes (64 bits)
+            0                           // Control: 0 (Driver handles the GO bit)
+        );
+
+        // 5. Fire the DMA
+        alt_msgdma_standard_descriptor_async_transfer(dma_dev, &desc);
+
+        // 6. Wait for the DMA to finish capturing that 1 sample
+        while (IORD_32DIRECT(dma_dev->csr_base, 0) & MSGDMA_CSR_STATUS_BUSY_MASK) {}
+
+        // 7. Extract the individual pin states directly from the uncached pointer
+        led  = (*uncached_sample & PIN_LED_STATUS) ? 1 : 0;
+        nss  = (*uncached_sample & PIN_NSS)        ? 1 : 0;
+        mosi = (*uncached_sample & PIN_MOSI)       ? 1 : 0;
+        sck  = (*uncached_sample & PIN_SCK)        ? 1 : 0;
+        miso = (*uncached_sample & PIN_MISO)       ? 1 : 0;
+
+        // 8. Print the states to the console
+        printf("NSS: %d | SCK: %d | MOSI: %d | MISO: %d | LED: %d\n",
+                nss, sck, mosi, miso, led);
+
+        // 9. Delay to prevent flooding the JTAG UART console (100 milliseconds)
+        usleep(100000);
+    }
+
+    return 0;
+}

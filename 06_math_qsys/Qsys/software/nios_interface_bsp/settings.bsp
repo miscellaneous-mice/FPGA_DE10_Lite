@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Mar 5, 2026 1:22:03 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1772653923603</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 5, 2026 1:52:23 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1772655743380</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Sandbox\FPGA_Clean\06_math_qsys\Qsys\software\nios_interface_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\avalon_design.sopcinfo</SopcDesignFile>

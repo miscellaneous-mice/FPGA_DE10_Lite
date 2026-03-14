@@ -1,0 +1,261 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate C:\Sandbox\FPGA\07_GPIO_Interfacing\Qsys\signal_analyzer.qsys --block-symbol-file --output-directory=C:\Sandbox\FPGA\07_GPIO_Interfacing\Qsys\signal_analyzer --family="MAX 10" --part=10M50DAF484C7G
+Progress: Loading Qsys/signal_analyzer.qsys
+Progress: Reading input file
+Progress: Adding DEBUG [altera_avalon_jtag_uart 18.1]
+Progress: Parameterizing module DEBUG
+Progress: Adding DMA_IO [altera_msgdma 18.1]
+Progress: Parameterizing module DMA_IO
+Progress: Adding FLASH_MEM [altera_onchip_flash 18.1]
+Progress: Parameterizing module FLASH_MEM
+Progress: Adding FPU [altera_nios_custom_instr_floating_point 18.1]
+Progress: Parameterizing module FPU
+Progress: Adding GPIO [subsystemA 1.0]
+Progress: Reading input file
+Progress: Adding DMA [altera_msgdma 18.1]
+Progress: Parameterizing module DMA
+Progress: Adding avalon_gpio_interface_0 [avalon_gpio_interface 1.0]
+Progress: Parameterizing module avalon_gpio_interface_0
+Progress: Adding clock_bridge_0 [altera_clock_bridge 18.1]
+Progress: Parameterizing module clock_bridge_0
+Progress: Adding peripheral_bridge [altera_avalon_mm_bridge 18.1]
+Progress: Parameterizing module peripheral_bridge
+Progress: Adding reset_bridge_0 [altera_reset_bridge 18.1]
+Progress: Parameterizing module reset_bridge_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Progress: Parameterizing module GPIO
+Progress: Adding IO_Modules [subsystemB 1.0]
+Progress: Reading input file
+Progress: Adding avalon_hex_pio [avalon_hex_pio 1.0]
+Progress: Parameterizing module avalon_hex_pio
+Progress: Adding avalon_key_pio [avalon_key_pio 1.0]
+Progress: Parameterizing module avalon_key_pio
+Progress: Adding avalon_sw_pio [avalon_sw_pio 1.0]
+Progress: Parameterizing module avalon_sw_pio
+Progress: Adding clock [altera_clock_bridge 18.1]
+Progress: Parameterizing module clock
+Progress: Adding peripheral_bridge [altera_avalon_mm_bridge 18.1]
+Progress: Parameterizing module peripheral_bridge
+Progress: Adding reset [altera_reset_bridge 18.1]
+Progress: Parameterizing module reset
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Progress: Parameterizing module IO_Modules
+Progress: Adding NIOS_II [altera_nios2_gen2 18.1]
+Progress: Parameterizing module NIOS_II
+Progress: Adding SDRAM [altera_avalon_new_sdram_controller 18.1]
+Progress: Parameterizing module SDRAM
+Progress: Adding SDRAM_PLL [altpll 18.1]
+Progress: Parameterizing module SDRAM_PLL
+Progress: Adding SYS_ID [altera_avalon_sysid_qsys 18.1]
+Progress: Parameterizing module SYS_ID
+Progress: Adding clk_0 [clock_source 18.1]
+Progress: Parameterizing module clk_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: signal_analyzer.DEBUG: JTAG UART IP input clock need to be at least double (2x) the operating frequency of JTAG TCK on board
+Info: signal_analyzer.DMA_IO: Response information port is disabled. Enable the response port if data transfer information is required by host
+Info: signal_analyzer.GPIO.DMA: Response information port is disabled. Enable the response port if data transfer information is required by host
+Info: signal_analyzer.SDRAM: SDRAM Controller will only be supported in Quartus Prime Standard Edition in the future release.
+Info: signal_analyzer.SYS_ID: System ID is not assigned automatically. Edit the System ID parameter to provide a unique ID
+Info: signal_analyzer.SYS_ID: Time stamp will be automatically updated when this component is generated.
+Warning: signal_analyzer.SDRAM_PLL: SDRAM_PLL.pll_slave must be connected to an Avalon-MM master
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate C:\Sandbox\FPGA\07_GPIO_Interfacing\Qsys\signal_analyzer.qsys --synthesis=VERILOG --output-directory=C:\Sandbox\FPGA\07_GPIO_Interfacing\Qsys\signal_analyzer\synthesis --family="MAX 10" --part=10M50DAF484C7G
+Progress: Loading Qsys/signal_analyzer.qsys
+Progress: Reading input file
+Progress: Adding DEBUG [altera_avalon_jtag_uart 18.1]
+Progress: Parameterizing module DEBUG
+Progress: Adding DMA_IO [altera_msgdma 18.1]
+Progress: Parameterizing module DMA_IO
+Progress: Adding FLASH_MEM [altera_onchip_flash 18.1]
+Progress: Parameterizing module FLASH_MEM
+Progress: Adding FPU [altera_nios_custom_instr_floating_point 18.1]
+Progress: Parameterizing module FPU
+Progress: Adding GPIO [subsystemA 1.0]
+Progress: Parameterizing module GPIO
+Progress: Adding IO_Modules [subsystemB 1.0]
+Progress: Parameterizing module IO_Modules
+Progress: Adding NIOS_II [altera_nios2_gen2 18.1]
+Progress: Parameterizing module NIOS_II
+Progress: Adding SDRAM [altera_avalon_new_sdram_controller 18.1]
+Progress: Parameterizing module SDRAM
+Progress: Adding SDRAM_PLL [altpll 18.1]
+Progress: Parameterizing module SDRAM_PLL
+Progress: Adding SYS_ID [altera_avalon_sysid_qsys 18.1]
+Progress: Parameterizing module SYS_ID
+Progress: Adding clk_0 [clock_source 18.1]
+Progress: Parameterizing module clk_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: signal_analyzer.DEBUG: JTAG UART IP input clock need to be at least double (2x) the operating frequency of JTAG TCK on board
+Info: signal_analyzer.DMA_IO: Response information port is disabled. Enable the response port if data transfer information is required by host
+Info: signal_analyzer.GPIO.DMA: Response information port is disabled. Enable the response port if data transfer information is required by host
+Info: signal_analyzer.SDRAM: SDRAM Controller will only be supported in Quartus Prime Standard Edition in the future release.
+Info: signal_analyzer.SYS_ID: System ID is not assigned automatically. Edit the System ID parameter to provide a unique ID
+Info: signal_analyzer.SYS_ID: Time stamp will be automatically updated when this component is generated.
+Warning: signal_analyzer.SDRAM_PLL: SDRAM_PLL.pll_slave must be connected to an Avalon-MM master
+Info: signal_analyzer: Generating signal_analyzer "signal_analyzer" for QUARTUS_SYNTH
+Warning: signal_analyzer: "No matching role found for NIOS_II_custom_instruction_master_translator:ci_slave:ci_slave_result (result)"
+Warning: signal_analyzer: "No matching role found for NIOS_II_custom_instruction_master_multi_xconnect:ci_slave:ci_slave_ipending (ipending)"
+Warning: signal_analyzer: "No matching role found for NIOS_II_custom_instruction_master_multi_xconnect:ci_slave:ci_slave_estatus (estatus)"
+Info: DEBUG: Starting RTL generation for module 'signal_analyzer_DEBUG'
+Info: DEBUG:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart/generate_rtl.pl --name=signal_analyzer_DEBUG --dir=C:/Users/prate/AppData/Local/Temp/alt0526_8705742319521788673.dir/0002_DEBUG_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/prate/AppData/Local/Temp/alt0526_8705742319521788673.dir/0002_DEBUG_gen//signal_analyzer_DEBUG_component_configuration.pl  --do_build_sim=0  ]
+Info: DEBUG: Done RTL generation for module 'signal_analyzer_DEBUG'
+Info: DEBUG: "signal_analyzer" instantiated altera_avalon_jtag_uart "DEBUG"
+Info: DMA_IO: "signal_analyzer" instantiated altera_msgdma "DMA_IO"
+Info: FLASH_MEM: Generating top-level entity altera_onchip_flash
+Info: FLASH_MEM: "signal_analyzer" instantiated altera_onchip_flash "FLASH_MEM"
+Info: FPU: "signal_analyzer" instantiated altera_nios_custom_instr_floating_point "FPU"
+Info: GPIO: "signal_analyzer" instantiated subsystemA "GPIO"
+Info: IO_Modules: "signal_analyzer" instantiated subsystemB "IO_Modules"
+Info: NIOS_II: "signal_analyzer" instantiated altera_nios2_gen2 "NIOS_II"
+Info: SDRAM: Starting RTL generation for module 'signal_analyzer_SDRAM'
+Info: SDRAM:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller/generate_rtl.pl --name=signal_analyzer_SDRAM --dir=C:/Users/prate/AppData/Local/Temp/alt0526_8705742319521788673.dir/0004_SDRAM_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/prate/AppData/Local/Temp/alt0526_8705742319521788673.dir/0004_SDRAM_gen//signal_analyzer_SDRAM_component_configuration.pl  --do_build_sim=0  ]
+Info: SDRAM: Done RTL generation for module 'signal_analyzer_SDRAM'
+Info: SDRAM: "signal_analyzer" instantiated altera_avalon_new_sdram_controller "SDRAM"
+Info: SDRAM_PLL: "signal_analyzer" instantiated altpll "SDRAM_PLL"
+Info: SYS_ID: "signal_analyzer" instantiated altera_avalon_sysid_qsys "SYS_ID"
+Info: NIOS_II_custom_instruction_master_translator: "signal_analyzer" instantiated altera_customins_master_translator "NIOS_II_custom_instruction_master_translator"
+Info: NIOS_II_custom_instruction_master_multi_xconnect: "signal_analyzer" instantiated altera_customins_xconnect "NIOS_II_custom_instruction_master_multi_xconnect"
+Info: NIOS_II_custom_instruction_master_multi_slave_translator0: "signal_analyzer" instantiated altera_customins_slave_translator "NIOS_II_custom_instruction_master_multi_slave_translator0"
+Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_001: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_002: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_003: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_004: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_005: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_006: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_007: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_008: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_009: Inserting error_adapter: error_adapter_0
+Info: mm_interconnect_0: "signal_analyzer" instantiated altera_mm_interconnect "mm_interconnect_0"
+Info: irq_mapper: "signal_analyzer" instantiated altera_irq_mapper "irq_mapper"
+Info: rst_controller: "signal_analyzer" instantiated altera_reset_controller "rst_controller"
+Info: dispatcher_internal: "DMA_IO" instantiated modular_sgdma_dispatcher "dispatcher_internal"
+Info: read_mstr_internal: "DMA_IO" instantiated dma_read_master "read_mstr_internal"
+Info: write_mstr_internal: "DMA_IO" instantiated dma_write_master "write_mstr_internal"
+Info: DMA: "GPIO" instantiated altera_msgdma "DMA"
+Info: avalon_gpio_interface_0: "GPIO" instantiated avalon_gpio_interface "avalon_gpio_interface_0"
+Info: peripheral_bridge: "GPIO" instantiated altera_avalon_mm_bridge "peripheral_bridge"
+Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_001: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_002: Inserting error_adapter: error_adapter_0
+Info: mm_interconnect_0: "GPIO" instantiated altera_mm_interconnect "mm_interconnect_0"
+Info: avalon_hex_pio: "IO_Modules" instantiated avalon_hex_pio "avalon_hex_pio"
+Info: avalon_key_pio: "IO_Modules" instantiated avalon_key_pio "avalon_key_pio"
+Info: avalon_sw_pio: "IO_Modules" instantiated avalon_sw_pio "avalon_sw_pio"
+Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_001: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_002: Inserting error_adapter: error_adapter_0
+Info: mm_interconnect_0: "IO_Modules" instantiated altera_mm_interconnect "mm_interconnect_0"
+Info: cpu: Starting RTL generation for module 'signal_analyzer_NIOS_II_cpu'
+Info: cpu:   Generation command is [exec C:/intelFPGA_lite/18.1/quartus/bin64//eperlcmd.exe -I C:/intelFPGA_lite/18.1/quartus/bin64//perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/cpu_lib -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/nios_lib -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -- C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/generate_rtl.epl --name=signal_analyzer_NIOS_II_cpu --dir=C:/Users/prate/AppData/Local/Temp/alt0526_8705742319521788673.dir/0021_cpu_gen/ --quartus_bindir=C:/intelFPGA_lite/18.1/quartus/bin64/ --verilog --config=C:/Users/prate/AppData/Local/Temp/alt0526_8705742319521788673.dir/0021_cpu_gen//signal_analyzer_NIOS_II_cpu_processor_configuration.pl  --do_build_sim=0  ]
+Info: cpu: # 2026.03.15 03:30:43 (*) Starting Nios II generation
+Info: cpu: # 2026.03.15 03:30:43 (*)   Checking for plaintext license.
+Info: cpu: # 2026.03.15 03:30:43 (*)   Couldn't query license setup in Quartus directory C:/intelFPGA_lite/18.1/quartus/bin64/
+Info: cpu: # 2026.03.15 03:30:43 (*)   Defaulting to contents of LM_LICENSE_FILE environment variable
+Info: cpu: # 2026.03.15 03:30:43 (*)   LM_LICENSE_FILE environment variable is empty
+Info: cpu: # 2026.03.15 03:30:43 (*)   Plaintext license not found.
+Info: cpu: # 2026.03.15 03:30:43 (*)   Checking for encrypted license (non-evaluation).
+Info: cpu: # 2026.03.15 03:30:43 (*)   Couldn't query license setup in Quartus directory C:/intelFPGA_lite/18.1/quartus/bin64/
+Info: cpu: # 2026.03.15 03:30:43 (*)   Defaulting to contents of LM_LICENSE_FILE environment variable
+Info: cpu: # 2026.03.15 03:30:43 (*)   LM_LICENSE_FILE environment variable is empty
+Info: cpu: # 2026.03.15 03:30:43 (*)   Encrypted license not found.  Defaulting to OCP evaluation license (produces a time-limited SOF)
+Info: cpu: # 2026.03.15 03:30:43 (*)   Elaborating CPU configuration settings
+Info: cpu: # 2026.03.15 03:30:43 (*)   Creating all objects for CPU
+Info: cpu: # 2026.03.15 03:30:43 (*)     Testbench
+Info: cpu: # 2026.03.15 03:30:44 (*)     Instruction decoding
+Info: cpu: # 2026.03.15 03:30:44 (*)       Instruction fields
+Info: cpu: # 2026.03.15 03:30:44 (*)       Instruction decodes
+Info: cpu: # 2026.03.15 03:30:44 (*)       Signals for RTL simulation waveforms
+Info: cpu: # 2026.03.15 03:30:44 (*)       Instruction controls
+Info: cpu: # 2026.03.15 03:30:44 (*)     Pipeline frontend
+Info: cpu: # 2026.03.15 03:30:44 (*)     Pipeline backend
+Info: cpu: # 2026.03.15 03:30:45 (*)   Generating RTL from CPU objects
+Info: cpu: # 2026.03.15 03:30:46 (*)   Creating encrypted RTL
+Info: cpu: # 2026.03.15 03:30:46 (*) Done Nios II generation
+Info: cpu: Done RTL generation for module 'signal_analyzer_NIOS_II_cpu'
+Info: cpu: "NIOS_II" instantiated altera_nios2_gen2_unit "cpu"
+Info: NIOS_II_data_master_translator: "mm_interconnect_0" instantiated altera_merlin_master_translator "NIOS_II_data_master_translator"
+Info: DEBUG_avalon_jtag_slave_translator: "mm_interconnect_0" instantiated altera_merlin_slave_translator "DEBUG_avalon_jtag_slave_translator"
+Info: NIOS_II_data_master_agent: "mm_interconnect_0" instantiated altera_merlin_master_agent "NIOS_II_data_master_agent"
+Info: DEBUG_avalon_jtag_slave_agent: "mm_interconnect_0" instantiated altera_merlin_slave_agent "DEBUG_avalon_jtag_slave_agent"
+Info: DEBUG_avalon_jtag_slave_agent_rsp_fifo: "mm_interconnect_0" instantiated altera_avalon_sc_fifo "DEBUG_avalon_jtag_slave_agent_rsp_fifo"
+Info: router: "mm_interconnect_0" instantiated altera_merlin_router "router"
+Info: router_001: "mm_interconnect_0" instantiated altera_merlin_router "router_001"
+Info: router_002: "mm_interconnect_0" instantiated altera_merlin_router "router_002"
+Info: router_003: "mm_interconnect_0" instantiated altera_merlin_router "router_003"
+Info: router_005: "mm_interconnect_0" instantiated altera_merlin_router "router_005"
+Info: router_010: "mm_interconnect_0" instantiated altera_merlin_router "router_010"
+Info: router_011: "mm_interconnect_0" instantiated altera_merlin_router "router_011"
+Info: router_013: "mm_interconnect_0" instantiated altera_merlin_router "router_013"
+Info: router_014: "mm_interconnect_0" instantiated altera_merlin_router "router_014"
+Info: NIOS_II_data_master_limiter: "mm_interconnect_0" instantiated altera_merlin_traffic_limiter "NIOS_II_data_master_limiter"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_avalon_sc_fifo.v
+Info: SDRAM_s1_burst_adapter: "mm_interconnect_0" instantiated altera_merlin_burst_adapter "SDRAM_s1_burst_adapter"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_avalon_st_pipeline_base.v
+Info: cmd_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux"
+Info: cmd_demux_001: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux_001"
+Info: cmd_demux_003: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux_003"
+Info: cmd_demux_004: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux_004"
+Info: cmd_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux"
+Info: cmd_mux_005: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux_005"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: cmd_mux_006: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux_006"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: cmd_mux_008: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux_008"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: cmd_mux_009: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux_009"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: rsp_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "rsp_demux"
+Info: rsp_demux_006: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "rsp_demux_006"
+Info: rsp_demux_008: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "rsp_demux_008"
+Info: rsp_demux_009: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "rsp_demux_009"
+Info: rsp_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: rsp_mux_001: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux_001"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: rsp_mux_003: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux_003"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: NIOS_II_data_master_to_DMA_IO_descriptor_slave_cmd_width_adapter: "mm_interconnect_0" instantiated altera_merlin_width_adapter "NIOS_II_data_master_to_DMA_IO_descriptor_slave_cmd_width_adapter"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_address_alignment.sv
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_burst_uncompressor.sv
+Info: avalon_st_adapter: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter"
+Info: avalon_st_adapter_006: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter_006"
+Info: avalon_st_adapter_009: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter_009"
+Info: router: "mm_interconnect_0" instantiated altera_merlin_router "router"
+Info: router_001: "mm_interconnect_0" instantiated altera_merlin_router "router_001"
+Info: router_002: "mm_interconnect_0" instantiated altera_merlin_router "router_002"
+Info: cmd_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux"
+Info: cmd_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: rsp_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "rsp_demux"
+Info: rsp_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: router: "mm_interconnect_0" instantiated altera_merlin_router "router"
+Info: router_001: "mm_interconnect_0" instantiated altera_merlin_router "router_001"
+Info: cmd_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "cmd_demux"
+Info: cmd_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "cmd_mux"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: rsp_demux: "mm_interconnect_0" instantiated altera_merlin_demultiplexer "rsp_demux"
+Info: rsp_mux: "mm_interconnect_0" instantiated altera_merlin_multiplexer "rsp_mux"
+Info: Reusing file C:/Sandbox/FPGA/07_GPIO_Interfacing/Qsys/signal_analyzer/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: error_adapter_0: "avalon_st_adapter" instantiated error_adapter "error_adapter_0"
+Info: error_adapter_0: "avalon_st_adapter_006" instantiated error_adapter "error_adapter_0"
+Info: error_adapter_0: "avalon_st_adapter_009" instantiated error_adapter "error_adapter_0"
+Info: signal_analyzer: Done "signal_analyzer" with 81 modules, 126 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis

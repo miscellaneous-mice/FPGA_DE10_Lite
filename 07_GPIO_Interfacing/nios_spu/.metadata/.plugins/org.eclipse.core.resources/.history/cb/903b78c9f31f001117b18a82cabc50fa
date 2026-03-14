@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+#include "altera_msgdma.h"
+#include "altera_msgdma_descriptor_regs.h"
+
+// Cache bypass for Nios II Gen2
+#define CACHE_BYPASS_MASK 0x80000000
+#define UNCACHED(addr) ((void*)((uint32_t)(addr) | CACHE_BYPASS_MASK))
+
+// Ensure buffers are 32-byte aligned for DMA safety
+static volatile uint32_t key_buffer __attribute__ ((aligned (32))) = 0;
+static volatile uint32_t sw_buffer  __attribute__ ((aligned (32))) = 0;
+
+int main()
+{
+    printf("--- DMA Multi-Peripheral Test ---\n");
+    printf("Monitoring KEY0 to trigger Switch DMA...\n");
+
+    // 1. Open the DMA device
+    alt_msgdma_dev *dma_io = alt_msgdma_open(DMA_IO_CSR_NAME);
+    if (!dma_io) {
+        printf("Error: DMA_IO not found!\n");
+        return -1;
+    }
+
+    alt_msgdma_standard_descriptor desc;
+
+    while(1)
+    {
+        // ------------------------------------------------------------------
+        // STEP A: Read KEY state via DMA
+        // ------------------------------------------------------------------
+        alt_msgdma_construct_standard_mm_to_mm_descriptor(
+            dma_io, &desc,
+            (uint32_t *)IO_MODULES_AVALON_KEY_PIO_BASE, // Source: Key Register
+            (uint32_t *)&key_buffer,                    // Destination: SDRAM
+            4,                                          // Length: 4 bytes
+            ALTERA_MSGDMA_DESCRIPTOR_CONTROL_PARK_READS_MASK | (1 << 31)
+        );
+
+        alt_msgdma_standard_descriptor_sync_transfer(dma_io, &desc);
+
+        // Read using cache bypass
+        uint32_t actual_key = IORD_32DIRECT(UNCACHED(&key_buffer), 0);
+
+        // Check if KEY0 is pressed (Logic 1 based on your debouncer inversion)
+        if (actual_key & 0x01)
+        {
+            printf("KEY0 Pressed! Triggering DMA Switch Capture...\n");
+
+            // --------------------------------------------------------------
+            // STEP B: Read SWITCH values via DMA
+            // --------------------------------------------------------------
+            alt_msgdma_construct_standard_mm_to_mm_descriptor(
+                dma_io, &desc,
+                (uint32_t *)IO_MODULES_AVALON_SW_PIO_BASE, // Source: Switch Reg
+                (uint32_t *)&sw_buffer,                    // Destination: SDRAM
+                4,                                         // Length: 4 bytes
+                ALTERA_MSGDMA_DESCRIPTOR_CONTROL_PARK_READS_MASK | (1 << 31)
+            );
+
+            alt_msgdma_standard_descriptor_sync_transfer(dma_io, &desc);
+
+            // Access the captured switch values through the cache bypass
+            uint32_t actual_sw = IORD_32DIRECT(UNCACHED(&sw_buffer), 0);
+
+            // Print the result (Masking to 10-bits for DE10-Lite switches)
+            printf("SUCCESS: Captured Switches: 0x%03X\n", (unsigned int)(actual_sw & 0x3FF));
+
+            // Debounce delay to prevent multiple triggers from one press
+            usleep(300000);
+        }
+
+        // Small poll interval
+        usleep(10000);
+    }
+
+    return 0;
+}

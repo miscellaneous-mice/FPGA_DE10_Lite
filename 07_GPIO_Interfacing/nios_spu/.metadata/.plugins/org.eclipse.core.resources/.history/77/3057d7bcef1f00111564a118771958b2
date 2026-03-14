@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <stdint.h>
+#include "system.h"
+#include "io.h"
+
+int main() {
+    printf("--- Direct PIO Diagnostic ---\n");
+
+    while(1) {
+        // Read KEY[0] directly from the peripheral bridge
+        // Using IORD_32DIRECT on a peripheral base address ALWAYS bypasses cache
+        uint32_t key_data = IORD_32DIRECT(IO_MODULES_AVALON_KEY_PIO_BASE, 0);
+        uint32_t sw_data  = IORD_32DIRECT(IO_MODULES_AVALON_SW_PIO_BASE, 0);
+
+        if (key_data & 0x01) {
+            printf("KEY0 Detected! Switches: 0x%03X\n", (unsigned int)sw_data);
+            // Write to HEX directly to test that module
+            IOWR_32DIRECT(IO_MODULES_AVALON_HEX_PIO_BASE, 0, sw_data);
+        }
+        usleep(100000);
+    }
+    return 0;
+}

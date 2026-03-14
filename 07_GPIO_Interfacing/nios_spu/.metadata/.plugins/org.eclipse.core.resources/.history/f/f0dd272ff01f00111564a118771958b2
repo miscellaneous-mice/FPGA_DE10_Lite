@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+
+int main()
+{
+    printf("--- PIO Key Test Initialized ---\n");
+    printf("Base Address: 0x%08X\n", (unsigned int)IO_MODULES_AVALON_KEY_PIO_BASE);
+
+    while(1)
+    {
+        /*
+           Based on your Verilog logic:
+           Offset 0 (0x0) -> key_debounced_0 (KEY0)
+           Offset 1 (0x4) -> key_debounced_1 (KEY1)
+           Your Verilog inverts the input (~KEY), so 1 = Pressed.
+        */
+
+        uint32_t key0_data = IORD_32DIRECT(IO_MODULES_AVALON_KEY_PIO_BASE, 0);
+        uint32_t key1_data = IORD_32DIRECT(IO_MODULES_AVALON_KEY_PIO_BASE, 4);
+
+        if (key0_data & 0x01) {
+            printf("KEY0 Pressed!\n");
+        }
+
+        if (key1_data & 0x01) {
+            printf("KEY1 Pressed!\n");
+        }
+
+        // 100ms delay to prevent flooding the JTAG terminal
+        usleep(100000);
+    }
+
+    return 0;
+}

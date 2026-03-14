@@ -1,0 +1,87 @@
+/*
+ * signal_capture_main.c
+ *
+ *  Created on: Mar 13, 2026
+ *      Author: prate
+ */
+
+#include <stdio.h>
+#include <stdint.h>
+#include <inttypes.h> // For printing 64-bit hex values
+#include "system.h"
+#include "altera_msgdma.h"
+#include "altera_msgdma_descriptor_regs.h"
+#include "sys/alt_cache.h"
+
+#define NUM_SAMPLES 10000
+
+// Allocate the buffer as an array of 64-bit integers!
+// 10,000 samples * 8 bytes = 80 KB of SDRAM used.
+uint64_t capture_buffer[NUM_SAMPLES] __attribute__ ((aligned (64)));
+
+int main()
+{
+    printf("Initializing 36-Channel Logic Analyzer...\n");
+
+    alt_msgdma_dev *dma_dev = alt_msgdma_open("/dev/msgdma_0_csr");
+    if (!dma_dev) {
+        printf("Error: Could not open mSGDMA!\n");
+        return -1;
+    }
+
+    alt_msgdma_standard_descriptor desc;
+
+    while(1)
+    {
+        printf("\nPress Enter to arm the logic analyzer...\n");
+        getchar();
+
+        printf("ARMED! Waiting for capture...\n");
+        alt_dcache_flush_all();
+
+        // Construct descriptor. Note: NUM_SAMPLES * 8 gives the total LENGTH IN BYTES.
+        alt_msgdma_construct_standard_st_to_mm_descriptor(
+            dma_dev,
+            &desc,
+            (uint32_t*)capture_buffer,
+            (NUM_SAMPLES * 8), // Length must be in BYTES
+            0
+        );
+
+        alt_msgdma_standard_descriptor_async_transfer(dma_dev, &desc);
+
+        while (alt_msgdma_read_status(dma_dev) & ALTERA_MSGDMA_CSR_BUSY_MASK) {}
+
+        printf("Capture Complete! Analyzing data...\n\n");
+
+        uint64_t last_state = 0xFFFFFFFFFFFFFFFF;
+
+        for (int i = 0; i < NUM_SAMPLES; i++)
+        {
+            uint64_t current_state = capture_buffer[i];
+
+            // Only print if ANY of the 36 pins changed state
+            if (current_state != last_state)
+            {
+                float timestamp_us = (float)i * 0.02f;
+
+                // Mask out the top 28 empty bits so we just see the 36 GPIOs
+                uint64_t gpio_only = current_state & 0x0000000FFFFFFFFF;
+
+                // Print the timestamp, followed by the 36 pins in Hexadecimal
+                // PRIX64 is a macro from inttypes.h used to print 64-bit hex
+                printf("[%6.2f us] GPIO State: 0x%09" PRIX64 "\n", timestamp_us, gpio_only);
+
+                // Optional: If you want to check a specific pin, you can do:
+                // uint8_t pin_15 = (current_state & (1ULL << 15)) ? 1 : 0;
+
+                last_state = current_state;
+            }
+        }
+        printf("\nReady for next capture.\n");
+    }
+
+    return 0;
+}
+
+

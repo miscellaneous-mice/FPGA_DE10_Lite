@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>     // For usleep()
+#include "system.h"
+#include "io.h"
+#include "altera_msgdma.h"
+#include "altera_msgdma_descriptor_regs.h"
+#include "sys/alt_cache.h"
+
+// Register byte offsets for your GPIO module
+#define GPIO_DIR_LOW_OFFSET    8   // Direction bits 0-31 (0=Input, 1=Output)
+
+// Define bitmasks for the specific SPI pins
+#define PIN_LED_STATUS (1ULL << 0)  // GPIO[0] - Bit 0
+#define PIN_NSS        (1ULL << 1)  // GPIO[1] - Bit 1
+#define PIN_MOSI       (1ULL << 2)  // GPIO[2] - Bit 2
+#define PIN_SCK        (1ULL << 3)  // GPIO[3] - Bit 3
+#define PIN_MISO       (1ULL << 4)  // GPIO[4] - Bit 4
+
+// The mSGDMA Busy bit is bit 0 of the Status Register (Offset 0)
+#ifndef MSGDMA_CSR_STATUS_BUSY_MASK
+    #define MSGDMA_CSR_STATUS_BUSY_MASK (1 << 0)
+#endif
+
+// We only need 1 sample (64-bits / 8 bytes) per loop for continuous monitoring
+// We still align it to 64 bytes so the DMA writes cleanly into SDRAM
+uint64_t dma_sample_buffer __attribute__ ((aligned (64)));
+
+int main()
+{
+    printf("Starting Continuous DMA SPI Pin Monitor (Cache-Safe)...\n");
+    printf("Waiting for signals from STM32...\n\n");
+
+    // 1. Configure all pins as INPUTS via Avalon-MM
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, GPIO_DIR_LOW_OFFSET, 0x00000000);
+
+    // 2. Open the mSGDMA device
+    alt_msgdma_dev *dma_dev = alt_msgdma_open(GPIO_DMA_CSR_NAME);
+    if (!dma_dev) {
+        printf("Error: Could not open DMA! Check Qsys names.\n");
+        return -1;
+    }
+
+    alt_msgdma_standard_descriptor desc;
+    uint8_t led, nss, mosi, sck, miso;
+
+    while(1)
+    {
+        // 3. Construct descriptor to grab exactly 1 sample (8 bytes) from the stream
+        alt_msgdma_construct_standard_st_to_mm_descriptor(
+            dma_dev,
+            &desc,
+            (uint32_t*)&dma_sample_buffer, // Normal pointer for the DMA hardware
+            8,                             // Length: 8 bytes (64 bits)
+            0                              // Control
+        );
+
+        // 4. Fire the DMA
+        alt_msgdma_standard_descriptor_async_transfer(dma_dev, &desc);
+
+        // 5. Wait for the DMA to finish capturing
+        while (IORD_32DIRECT(dma_dev->csr_base, 0) & MSGDMA_CSR_STATUS_BUSY_MASK) {}
+
+        // 6. BYPASS THE CACHE using direct I/O reads of the SDRAM buffer
+        // Avalon is Little-Endian, so offset 0 holds the lower 32 bits (GPIO 0-31)
+        // Offset 4 holds the upper 32 bits (GPIO 32-35 + padding)
+        uint32_t gpio_low  = IORD_32DIRECT((uint32_t)&dma_sample_buffer, 0);
+        uint32_t gpio_high = IORD_32DIRECT((uint32_t)&dma_sample_buffer, 4);
+
+        // Reconstruct the full 64-bit value perfectly bypassing the cache
+        uint64_t uncached_sample = ((uint64_t)gpio_high << 32) | gpio_low;
+
+        // 7. Extract the individual pin states
+        led  = (uncached_sample & PIN_LED_STATUS) ? 1 : 0;
+        nss  = (uncached_sample & PIN_NSS)        ? 1 : 0;
+        mosi = (uncached_sample & PIN_MOSI)       ? 1 : 0;
+        sck  = (uncached_sample & PIN_SCK)        ? 1 : 0;
+        miso = (uncached_sample & PIN_MISO)       ? 1 : 0;
+
+        // 8. Print the states to the console
+        printf("NSS: %d | SCK: %d | MOSI: %d | MISO: %d | LED: %d\n",
+                nss, sck, mosi, miso, led);
+
+        // 9. Delay to prevent flooding the console (100 milliseconds)
+        usleep(100000);
+    }
+
+    return 0;
+}

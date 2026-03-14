@@ -1,0 +1,54 @@
+# # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
+# 
+preplace inst signal_analyzer.SDRAM -pg 1 -lvl 2 -y 530
+preplace inst signal_analyzer.DEBUG -pg 1 -lvl 2 -y 130
+preplace inst signal_analyzer.NIOS_II.cpu -pg 1
+preplace inst signal_analyzer.GPIO.avalon_gpio_interface_0 -pg 1
+preplace inst signal_analyzer.GPIO.DMA.write_mstr_internal -pg 1
+preplace inst signal_analyzer.IO_Modules.avalon_key_pio -pg 1
+preplace inst signal_analyzer.GPIO.clock_bridge_0 -pg 1
+preplace inst signal_analyzer.GPIO.DMA -pg 1
+preplace inst signal_analyzer.FLASH_MEM -pg 1 -lvl 2 -y 430
+preplace inst signal_analyzer.NIOS_II.reset_bridge -pg 1
+preplace inst signal_analyzer.GPIO.DMA.cb_inst -pg 1
+preplace inst signal_analyzer -pg 1 -lvl 1 -y 40 -regy -20
+preplace inst signal_analyzer.IO_Modules -pg 1 -lvl 4 -y 330
+preplace inst signal_analyzer.GPIO.reset_bridge_0 -pg 1
+preplace inst signal_analyzer.IO_Modules.clock -pg 1
+preplace inst signal_analyzer.GPIO -pg 1 -lvl 3 -y 200
+preplace inst signal_analyzer.DMA_IO -pg 1 -lvl 4 -y 120
+preplace inst signal_analyzer.IO_Modules.reset -pg 1
+preplace inst signal_analyzer.IO_Modules.peripheral_bridge -pg 1
+preplace inst signal_analyzer.FPU -pg 1 -lvl 3 -y 110
+preplace inst signal_analyzer.DMA_IO.cb_inst -pg 1
+preplace inst signal_analyzer.clk_0 -pg 1 -lvl 2 -y 250
+preplace inst signal_analyzer.SDRAM_PLL -pg 1 -lvl 3 -y 510
+preplace inst signal_analyzer.DMA_IO.write_mstr_internal -pg 1
+preplace inst signal_analyzer.SYS_ID -pg 1 -lvl 2 -y 30
+preplace inst signal_analyzer.NIOS_II.clock_bridge -pg 1
+preplace inst signal_analyzer.IO_Modules.avalon_sw_pio -pg 1
+preplace inst signal_analyzer.GPIO.peripheral_bridge -pg 1
+preplace inst signal_analyzer.DMA_IO.read_mstr_internal -pg 1
+preplace inst signal_analyzer.DMA_IO.rst_inst -pg 1
+preplace inst signal_analyzer.NIOS_II -pg 1 -lvl 1 -y 50
+preplace inst signal_analyzer.IO_Modules.avalon_hex_pio -pg 1
+preplace inst signal_analyzer.GPIO.DMA.dispatcher_internal -pg 1
+preplace inst signal_analyzer.GPIO.DMA.rst_inst -pg 1
+preplace inst signal_analyzer.DMA_IO.dispatcher_internal -pg 1
+preplace netloc EXPORT<net_container>signal_analyzer</net_container>(SLAVE)signal_analyzer.clk,(SLAVE)clk_0.clk_in) 1 0 2 NJ 260 NJ
+preplace netloc EXPORT<net_container>signal_analyzer</net_container>(SLAVE)signal_analyzer.pll_locked,(SLAVE)SDRAM_PLL.locked_conduit) 1 0 3 NJ 680 NJ 680 NJ
+preplace netloc EXPORT<net_container>signal_analyzer</net_container>(SLAVE)signal_analyzer.key_interface,(SLAVE)IO_Modules.key_interface) 1 0 4 NJ 400 NJ 400 NJ 400 NJ
+preplace netloc INTERCONNECT<net_container>signal_analyzer</net_container>(SLAVE)FLASH_MEM.nreset,(MASTER)clk_0.clk_reset,(SLAVE)GPIO.reset,(SLAVE)clk_0.clk_in_reset,(SLAVE)DEBUG.reset,(SLAVE)IO_Modules.reset,(SLAVE)SDRAM.reset,(SLAVE)NIOS_II.reset,(SLAVE)SYS_ID.reset,(MASTER)NIOS_II.debug_reset_request,(SLAVE)SDRAM_PLL.inclk_interface_reset,(SLAVE)DMA_IO.reset_n) 1 0 4 150 230 590 640 830 440 1270
+preplace netloc FAN_OUT<net_container>signal_analyzer</net_container>(SLAVE)DEBUG.clk,(SLAVE)FLASH_MEM.clk,(SLAVE)GPIO.clk,(MASTER)SDRAM_PLL.c0,(SLAVE)NIOS_II.clk,(SLAVE)SYS_ID.clk,(SLAVE)SDRAM.clk,(SLAVE)IO_Modules.clk,(SLAVE)DMA_IO.clock) 1 0 4 130 210 550 320 850 340 1230
+preplace netloc EXPORT<net_container>signal_analyzer</net_container>(SLAVE)signal_analyzer.gpio_interface,(SLAVE)GPIO.gpio_interface) 1 0 3 NJ 340 NJ 340 NJ
+preplace netloc POINT_TO_POINT<net_container>signal_analyzer</net_container>(MASTER)clk_0.clk,(SLAVE)SDRAM_PLL.inclk_interface) 1 2 1 790
+preplace netloc EXPORT<net_container>signal_analyzer</net_container>(MASTER)SDRAM_PLL.c1,(MASTER)signal_analyzer.sdram_clk) 1 3 2 NJ 560 NJ
+preplace netloc INTERCONNECT<net_container>signal_analyzer</net_container>(SLAVE)DEBUG.avalon_jtag_slave,(MASTER)NIOS_II.instruction_master,(SLAVE)FLASH_MEM.csr,(MASTER)DMA_IO.mm_write,(SLAVE)SYS_ID.control_slave,(SLAVE)FLASH_MEM.data,(SLAVE)SDRAM.s1,(MASTER)NIOS_II.data_master,(MASTER)GPIO.mm_write,(MASTER)DMA_IO.mm_read,(SLAVE)GPIO.s0,(SLAVE)DMA_IO.descriptor_slave,(SLAVE)IO_Modules.s0,(SLAVE)DMA_IO.csr,(SLAVE)NIOS_II.debug_mem_slave) 1 0 5 170 190 570 360 870 360 1190 80 1520
+preplace netloc POINT_TO_POINT<net_container>signal_analyzer</net_container>(MASTER)NIOS_II.custom_instruction_master,(SLAVE)FPU.s1) 1 1 2 NJ 120 N
+preplace netloc EXPORT<net_container>signal_analyzer</net_container>(SLAVE)SDRAM.wire,(SLAVE)signal_analyzer.sdram_wire) 1 0 2 NJ 520 NJ
+preplace netloc FAN_OUT<net_container>signal_analyzer</net_container>(MASTER)NIOS_II.irq,(SLAVE)GPIO.csr_irq,(SLAVE)DMA_IO.csr_irq,(SLAVE)DEBUG.irq) 1 1 3 530 240 790 160 1170
+preplace netloc EXPORT<net_container>signal_analyzer</net_container>(SLAVE)SDRAM_PLL.areset_conduit,(SLAVE)signal_analyzer.pll_areset) 1 0 3 NJ 660 NJ 660 NJ
+preplace netloc EXPORT<net_container>signal_analyzer</net_container>(SLAVE)signal_analyzer.sw_interface,(SLAVE)IO_Modules.sw_interface) 1 0 4 NJ 420 NJ 420 NJ 420 NJ
+preplace netloc EXPORT<net_container>signal_analyzer</net_container>(SLAVE)signal_analyzer.hex_interface,(SLAVE)IO_Modules.hex_interface) 1 0 4 NJ 380 NJ 380 NJ 380 NJ
+levelinfo -pg 1 0 100 1630
+levelinfo -hier signal_analyzer 110 290 620 980 1390 1540

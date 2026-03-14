@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+#include "altera_msgdma.h"
+#include "sys/alt_cache.h"
+
+// Register byte offsets for your GPIO module
+#define GPIO_DIR_LOW_OFFSET    8
+
+// Define bitmasks for the specific SPI pins
+#define PIN_LED_STATUS (1ULL << 0)
+#define PIN_NSS        (1ULL << 1)
+#define PIN_MOSI       (1ULL << 2)
+#define PIN_SCK        (1ULL << 3)
+#define PIN_MISO       (1ULL << 4)
+
+// Buffer for DMA to write to. Aligned to 64 bytes for DMA efficiency.
+uint64_t dma_sample_buffer __attribute__ ((aligned (64)));
+
+int main()
+{
+    printf("Starting Ultra-Reliable DMA GPIO Monitor...\n");
+
+    // 1. Configure all pins as INPUTS via Avalon-MM
+    // This allows the physical voltage to reach the Verilog sampler
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, GPIO_DIR_LOW_OFFSET, 0x00000000);
+
+    // 2. Open the mSGDMA device
+    alt_msgdma_dev *dma_dev = alt_msgdma_open(GPIO_DMA_CSR_NAME);
+    if (!dma_dev) {
+        printf("Error: Could not open DMA! Check Qsys names.\n");
+        return -1;
+    }
+
+    alt_msgdma_standard_descriptor desc;
+    uint8_t led, nss, mosi, sck, miso;
+    int dma_status;
+
+    while(1)
+    {
+        // 3. FLUSH THE CACHE!
+        // This forces the CPU to push its zeros to RAM now, so it doesn't
+        // accidentally overwrite our DMA data later.
+        alt_dcache_flush_all();
+
+        // 4. Construct descriptor to grab 1 sample (8 bytes) from the stream
+        alt_msgdma_construct_standard_st_to_mm_descriptor(
+            dma_dev,
+            &desc,
+            (uint32_t*)&dma_sample_buffer,
+            8,  // Length: 8 bytes (64 bits)
+            0   // Control flags (driver auto-sets the GO bit)
+        );
+
+        // 5. Fire the DMA using the SYNCHRONOUS function!
+        // This function automatically writes the descriptor, fires the GO bit,
+        // and safely waits for the hardware to finish before moving to the next line.
+        dma_status = alt_msgdma_standard_descriptor_sync_transfer(dma_dev, &desc);
+
+        if (dma_status != 0) {
+            printf("DMA Transfer Error Code: %d\n", dma_status);
+        }
+
+        // 6. BYPASS THE CACHE to read the fresh data from physical SDRAM
+        // Offset 0 = Lower 32 bits, Offset 4 = Upper 32 bits
+        uint32_t gpio_low  = IORD_32DIRECT((uint32_t)&dma_sample_buffer, 0);
+        uint32_t gpio_high = IORD_32DIRECT((uint32_t)&dma_sample_buffer, 4);
+
+        // Reconstruct the full 64-bit value
+        uint64_t uncached_sample = ((uint64_t)gpio_high << 32) | gpio_low;
+
+        // 7. Extract the individual pin states
+        led  = (uncached_sample & PIN_LED_STATUS) ? 1 : 0;
+        nss  = (uncached_sample & PIN_NSS)        ? 1 : 0;
+        mosi = (uncached_sample & PIN_MOSI)       ? 1 : 0;
+        sck  = (uncached_sample & PIN_SCK)        ? 1 : 0;
+        miso = (uncached_sample & PIN_MISO)       ? 1 : 0;
+
+        // 8. Print the states to the console
+        printf("NSS: %d | SCK: %d | MOSI: %d | MISO: %d | LED: %d\n",
+                nss, sck, mosi, miso, led);
+
+        // 9. Delay to prevent flooding the console (100 milliseconds)
+        usleep(100000);
+    }
+
+    return 0;
+}

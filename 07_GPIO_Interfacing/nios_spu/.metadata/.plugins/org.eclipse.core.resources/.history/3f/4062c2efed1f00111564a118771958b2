@@ -1,0 +1,94 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>
+#include "system.h"
+#include "io.h"
+
+// Buffer variables in SDRAM for DMA to move data into/out of.
+// Aligned to 32 bytes for clean SDRAM transactions.
+volatile uint32_t sw_val  __attribute__ ((aligned (32)));
+volatile uint32_t key_val __attribute__ ((aligned (32)));
+
+int main()
+{
+    printf("--- Logic Analyzer System Initialized (RAW REGISTER MODE) ---\n");
+
+    // 1. Configure GPIO bits 0-31 as Outputs (Offset 8) using Avalon-MM
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, 8, 0xFFFFFFFF);
+
+    // 2. HARD RESET THE DMA HARDWARE
+    // If a previous test locked up the DMA, it stays stuck forever.
+    // Offset 4 of the CSR base is the Control Register. Bit 1 triggers a soft reset.
+    printf("Resetting DMA to clear any stuck FIFOs...\n");
+    IOWR_32DIRECT(DMA_IO_CSR_BASE, 4, (1 << 1));
+    usleep(2000); // Give the hardware 2 milliseconds to reboot internally
+    IOWR_32DIRECT(DMA_IO_CSR_BASE, 4, 0);        // Clear the reset bit
+    usleep(2000);
+
+    printf("System Ready. Press KEY0 to capture SW and update HEX!\n\n");
+
+    while(1)
+    {
+        // ===================================================================
+        // STEP A: Read KEY[0] using RAW DMA
+        // We write the 4 descriptor commands directly to the hardware FIFO.
+        // ===================================================================
+        IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0x0, IO_MODULES_AVALON_KEY_PIO_BASE); // Read Source
+        IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0x4, (uint32_t)&key_val);             // Write Dest (Memory)
+        IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0x8, 4);                              // Length (4 bytes)
+
+        // Control Word: Bit 31 (GO) | Bit 10 (PARK_READ)
+        // Writing to 0xC instantly commits the descriptor and fires the DMA.
+        IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0xC, (1 << 31) | (1 << 10));
+
+        // Wait for DMA hardware to clear the BUSY bit (Bit 0 of Status Register)
+        while (IORD_32DIRECT(DMA_IO_CSR_BASE, 0) & 1);
+
+        // Bypass CPU cache to see the physical memory the DMA just wrote
+        uint32_t actual_key = IORD_32DIRECT((uint32_t)&key_val, 0);
+
+        // Check if KEY0 is pressed (Bit 0 is 1)
+        if (actual_key & 0x01)
+        {
+            printf("KEY0 Pressed! Transferring SW -> SDRAM -> HEX & GPIO...\n");
+
+            // ===================================================================
+            // STEP B: Read SW values into SDRAM using RAW DMA
+            // ===================================================================
+            IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0x0, IO_MODULES_AVALON_SW_PIO_BASE);
+            IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0x4, (uint32_t)&sw_val);
+            IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0x8, 4);
+            // Control Word: Bit 31 (GO) | Bit 10 (PARK_READ)
+            IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0xC, (1 << 31) | (1 << 10));
+
+            while (IORD_32DIRECT(DMA_IO_CSR_BASE, 0) & 1); // Wait for DMA
+
+            // Read the fresh physical memory
+            uint32_t actual_sw = IORD_32DIRECT((uint32_t)&sw_val, 0);
+
+            // ===================================================================
+            // STEP C: Write value to GPIO using Avalon-MM (Direct)
+            // ===================================================================
+            IOWR_32DIRECT(GPIO_AVALON_GPIO_INTERFACE_0_BASE, 0, actual_sw);
+
+            // ===================================================================
+            // STEP D: Write value to HEX Display using RAW DMA
+            // ===================================================================
+            IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0x0, (uint32_t)&sw_val);
+            IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0x4, IO_MODULES_AVALON_HEX_PIO_BASE);
+            IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0x8, 4);
+            // Control Word: Bit 31 (GO) | Bit 11 (PARK_WRITE)
+            IOWR_32DIRECT(DMA_IO_DESCRIPTOR_SLAVE_BASE, 0xC, (1 << 31) | (1 << 11));
+
+            while (IORD_32DIRECT(DMA_IO_CSR_BASE, 0) & 1); // Wait for DMA
+
+            printf("Success! Switches: 0x%03X written to HEX.\n\n", (unsigned int)actual_sw);
+
+            usleep(250000); // 250ms Debounce delay to prevent multiple reads
+        }
+
+        usleep(10000); // 10ms loop delay
+    }
+
+    return 0;
+}

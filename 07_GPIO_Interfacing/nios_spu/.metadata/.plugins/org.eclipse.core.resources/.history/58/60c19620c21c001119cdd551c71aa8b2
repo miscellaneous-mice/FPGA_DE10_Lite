@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <unistd.h>     // For usleep()
+#include "system.h"     // Contains your hardware base addresses
+#include "io.h"         // Contains IORD and IOWR macros
+
+// Register byte offsets
+#define GPIO_DATA_LOW_OFFSET   0   // Read/Write bits 0-31
+#define GPIO_DIR_LOW_OFFSET    8   // Direction bits 0-31 (0=Input, 1=Output)
+
+// Define bitmasks for the specific SPI pins
+#define PIN_LED_STATUS (1 << 0)  // GPIO[0] - Bit 0
+#define PIN_NSS        (1 << 1)  // GPIO[1] - Bit 1
+#define PIN_MOSI       (1 << 2)  // GPIO[2] - Bit 2
+#define PIN_SCK        (1 << 3)  // GPIO[3] - Bit 3
+#define PIN_MISO       (1 << 4)  // GPIO[4] - Bit 4
+
+int main()
+{
+    printf("Starting SPI Pin Monitor...\n");
+    printf("Waiting for signals from STM32...\n\n");
+
+    // 1. Configure all pins as INPUTS to safely monitor the lines
+    // (If the FPGA is meant to *send* data back on MISO, you would set Bit 4 to '1' here,
+    // but for purely monitoring/sniffing, keep them all as 0/Inputs).
+    IOWR_32DIRECT(GPIO_AVALON_GPIO_PIO_BASE, GPIO_DIR_LOW_OFFSET, 0x00000000);
+
+    uint32_t gpio_val;
+    uint8_t led, nss, mosi, sck, miso;
+
+    while(1)
+    {
+        // 2. Read the current state of all lower 32 pins
+        gpio_val = IORD_32DIRECT(GPIO_AVALON_GPIO_PIO_BASE, GPIO_DATA_LOW_OFFSET);
+
+        // 3. Extract the individual pin states using bitwise AND
+        // The ternary operator (? 1 : 0) ensures the variable is strictly 1 or 0
+        led  = (gpio_val & PIN_LED_STATUS) ? 1 : 0;
+        nss  = (gpio_val & PIN_NSS)        ? 1 : 0;
+        mosi = (gpio_val & PIN_MOSI)       ? 1 : 0;
+        sck  = (gpio_val & PIN_SCK)        ? 1 : 0;
+        miso = (gpio_val & PIN_MISO)       ? 1 : 0;
+
+        // 4. Print the states to the console
+        printf("NSS: %d | SCK: %d | MOSI: %d | MISO: %d | LED: %d\r",
+                nss, sck, mosi, miso, led);
+
+        // fflush(stdout) forces the \r (carriage return) to overwrite the same line
+        // rather than scrolling forever.
+        fflush(stdout);
+
+        // 5. Delay to prevent flooding the JTAG UART console (100 milliseconds)
+        usleep(100000);
+    }
+
+    return 0;
+}
