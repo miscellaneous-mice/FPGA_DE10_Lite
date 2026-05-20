@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+newSoftwareExampleWizardPage.defaultLocation=C\:\\Sandbox\\FPGA\\08_Kalman_FIlter\\Qsys\\software\\kalman_filter
+newSoftwareExampleWizardPage.sopcinfoFile=C\:\\Sandbox\\FPGA\\08_Kalman_FIlter\\Qsys\\kalman_interface.sopcinfo
+newSoftwareExampleWizardPage2.newBspLocation=C\:\\Sandbox\\FPGA\\08_Kalman_FIlter\\Qsys\\software\\kalman_filter_bsp

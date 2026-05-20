@@ -1,0 +1,18 @@
+#include "io.h"
+#include "system.h"
+
+// Define Base Address from system.h (e.g., KALMAN_0_BASE)
+#define KALMAN_VALPHA    0
+#define KALMAN_VBETA     1
+#define KALMAN_OMEGA     7
+#define KALMAN_THETA     8
+
+void update_kalman(int valpha, int vbeta) {
+    // Send data to FPGA
+    IOWR_32DIRECT(KALMAN_0_BASE, KALMAN_VALPHA * 4, valpha);
+    IOWR_32DIRECT(KALMAN_0_BASE, KALMAN_VBETA * 4, vbeta);
+
+    // Read results from FPGA
+    int omega = IORD_32DIRECT(KALMAN_0_BASE, KALMAN_OMEGA * 4);
+    int theta = IORD_32DIRECT(KALMAN_0_BASE, KALMAN_THETA * 4);
+}
