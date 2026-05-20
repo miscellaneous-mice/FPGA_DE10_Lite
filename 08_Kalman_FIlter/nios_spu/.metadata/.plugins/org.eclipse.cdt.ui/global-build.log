@@ -1,29 +1,29 @@
-01:18:23 **** Build of configuration Nios II for project kalman_filter ****
+01:22:39 **** Build of configuration Nios II for project kalman_filter ****
 make all 
 Info: Building ../kalman_filter_bsp/
 C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../kalman_filter_bsp/
 [BSP build complete]
-Info: Compiling hello_world_small.c to obj/default/hello_world_small.o
-nios2-elf-gcc -xc -MP -MMD -c -I../kalman_filter_bsp//HAL/inc -I../kalman_filter_bsp/ -I../kalman_filter_bsp//drivers/inc  -pipe -D__hal__ -DALT_NO_C_PLUS_PLUS -DALT_NO_CLEAN_EXIT -D'exit(a)=_exit(a)' -DALT_NO_EXIT -DALT_USE_DIRECT_DRIVERS -DALT_NO_INSTRUCTION_EMULATION -DALT_USE_SMALL_DRIVERS -DALT_SINGLE_THREADED    -Os -g -Wall   -mno-hw-div -mcustom-fpu-cfg=60-1 -mhw-mul -mno-hw-mulx -mgpopt=global  -o obj/default/hello_world_small.o hello_world_small.c
+Info: Compiling main.c to obj/default/main.o
+nios2-elf-gcc -xc -MP -MMD -c -I../kalman_filter_bsp//HAL/inc -I../kalman_filter_bsp/ -I../kalman_filter_bsp//drivers/inc  -pipe -D__hal__ -DALT_NO_C_PLUS_PLUS -DALT_NO_CLEAN_EXIT -D'exit(a)=_exit(a)' -DALT_NO_EXIT -DALT_USE_DIRECT_DRIVERS -DALT_NO_INSTRUCTION_EMULATION -DALT_USE_SMALL_DRIVERS -DALT_SINGLE_THREADED    -Os -g -Wall   -mno-hw-div -mcustom-fpu-cfg=60-1 -mhw-mul -mno-hw-mulx -mgpopt=global  -o obj/default/main.o main.c
 Info: Linking kalman_filter.elf
-nios2-elf-g++  -T'../kalman_filter_bsp//linker.x' -msys-crt0='../kalman_filter_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -L../kalman_filter_bsp/  -mcustom-fpu-cfg=60-1  -Wl,-Map=kalman_filter.map   -Os -g -Wall   -mno-hw-div -mcustom-fpu-cfg=60-1 -mhw-mul -mno-hw-mulx -mgpopt=global  -o kalman_filter.elf obj/default/hello_world_small.o -lm -msys-lib=m
+nios2-elf-g++  -T'../kalman_filter_bsp//linker.x' -msys-crt0='../kalman_filter_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -L../kalman_filter_bsp/  -mcustom-fpu-cfg=60-1  -Wl,-Map=kalman_filter.map   -Os -g -Wall   -mno-hw-div -mcustom-fpu-cfg=60-1 -mhw-mul -mno-hw-mulx -mgpopt=global  -o kalman_filter.elf obj/default/main.o -lm -msys-lib=m
 c:/intelfpga_lite/18.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(closer.o): In function `_close_r':
 /build/arc/temp/823101626/ACDS_lwr/ip/sopc/app/gnu/BUILD/gnu/build-newlib.nios2-elf.x86_64-w64-mingw32/nios2-elf/newlib/libc/reent/../../../../../src/newlib-2.2/newlib/libc/reent/closer.c:53: warning: warning: close is not implemented and will always fail
 c:/intelfpga_lite/18.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-lseekr.o): In function `_lseek_r':
-nios2-elf-insert kalman_filter.elf --thread_model hal --cpu_name NIOS --qsys true --simulation_enabled false --id 0 --sidp 0x8201088 --timestamp 1779304945 --stderr_dev DEBUG --stdin_dev DEBUG --stdout_dev DEBUG --sopc_system_name kalman_interface --quartus_project_dir "C:/Sandbox/FPGA/08_Kalman_FIlter/Qsys" --sopcinfo C:/Sandbox/FPGA/08_Kalman_FIlter/Qsys/software/kalman_filter_bsp/../../kalman_interface.sopcinfo
 /build/arc/temp/823101626/ACDS_lwr/ip/sopc/app/gnu/BUILD/gnu/build-newlib.nios2-elf.x86_64-w64-mingw32/nios2-elf/newlib/libc/reent/../../../../../src/newlib-2.2/newlib/libc/reent/lseekr.c:58: warning: warning: lseek is not implemented and will always fail
+nios2-elf-insert kalman_filter.elf --thread_model hal --cpu_name NIOS --qsys true --simulation_enabled false --id 0 --sidp 0x8201088 --timestamp 1779304945 --stderr_dev DEBUG --stdin_dev DEBUG --stdout_dev DEBUG --sopc_system_name kalman_interface --quartus_project_dir "C:/Sandbox/FPGA/08_Kalman_FIlter/Qsys" --sopcinfo C:/Sandbox/FPGA/08_Kalman_FIlter/Qsys/software/kalman_filter_bsp/../../kalman_interface.sopcinfo
 Info: (kalman_filter.elf) 58 KBytes program size (code + initialized data).
 Info:                     65474 KBytes free for stack + heap.
 Info: Creating kalman_filter.objdump
 nios2-elf-objdump --disassemble --syms --all-header --source kalman_filter.elf >kalman_filter.objdump
 [kalman_filter build complete]
-01:18:30 **** Build of configuration Nios II for project kalman_filter ****
+01:22:48 **** Build of configuration Nios II for project kalman_filter ****
 make all 
 Info: Building ../kalman_filter_bsp/
 C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../kalman_filter_bsp/
 [BSP build complete]
 [kalman_filter build complete]
-01:18:30 **** Incremental Build of configuration Nios II for project kalman_filter ****
+01:22:49 **** Incremental Build of configuration Nios II for project kalman_filter ****
 make all 
 Info: Building ../kalman_filter_bsp/
 C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../kalman_filter_bsp/

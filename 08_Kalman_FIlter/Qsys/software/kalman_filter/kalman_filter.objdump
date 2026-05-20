@@ -41,43 +41,43 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  11 .debug_abbrev 00007cb1  00000000  00000000  0002f401  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_line   0000a10a  00000000  00000000  000370b2  2**0
+ 12 .debug_line   0000a0fd  00000000  00000000  000370b2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_frame  000019cc  00000000  00000000  000411bc  2**2
+ 13 .debug_frame  000019cc  00000000  00000000  000411b0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    00003264  00000000  00000000  00042b88  2**0
+ 14 .debug_str    00003250  00000000  00000000  00042b7c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_loc    00018df3  00000000  00000000  00045dec  2**0
+ 15 .debug_loc    00018df3  00000000  00000000  00045dcc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_alt_sim_info 00000060  00000000  00000000  0005ebe0  2**2
+ 16 .debug_alt_sim_info 00000060  00000000  00000000  0005ebc0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_ranges 00001a28  00000000  00000000  0005ec40  2**3
+ 17 .debug_ranges 00001a28  00000000  00000000  0005ec20  2**3
                   CONTENTS, READONLY, DEBUGGING
- 18 .thread_model 00000003  00000000  00000000  000630b5  2**0
+ 18 .thread_model 00000003  00000000  00000000  00063081  2**0
                   CONTENTS, READONLY
- 19 .cpu          00000004  00000000  00000000  000630b8  2**0
+ 19 .cpu          00000004  00000000  00000000  00063084  2**0
                   CONTENTS, READONLY
- 20 .qsys         00000001  00000000  00000000  000630bc  2**0
+ 20 .qsys         00000001  00000000  00000000  00063088  2**0
                   CONTENTS, READONLY
- 21 .simulation_enabled 00000001  00000000  00000000  000630bd  2**0
+ 21 .simulation_enabled 00000001  00000000  00000000  00063089  2**0
                   CONTENTS, READONLY
- 22 .sysid_hash   00000004  00000000  00000000  000630be  2**0
+ 22 .sysid_hash   00000004  00000000  00000000  0006308a  2**0
                   CONTENTS, READONLY
- 23 .sysid_base   00000004  00000000  00000000  000630c2  2**0
+ 23 .sysid_base   00000004  00000000  00000000  0006308e  2**0
                   CONTENTS, READONLY
- 24 .sysid_time   00000004  00000000  00000000  000630c6  2**0
+ 24 .sysid_time   00000004  00000000  00000000  00063092  2**0
                   CONTENTS, READONLY
- 25 .stderr_dev   00000005  00000000  00000000  000630ca  2**0
+ 25 .stderr_dev   00000005  00000000  00000000  00063096  2**0
                   CONTENTS, READONLY
- 26 .stdin_dev    00000005  00000000  00000000  000630cf  2**0
+ 26 .stdin_dev    00000005  00000000  00000000  0006309b  2**0
                   CONTENTS, READONLY
- 27 .stdout_dev   00000005  00000000  00000000  000630d4  2**0
+ 27 .stdout_dev   00000005  00000000  00000000  000630a0  2**0
                   CONTENTS, READONLY
- 28 .sopc_system_name 00000010  00000000  00000000  000630d9  2**0
+ 28 .sopc_system_name 00000010  00000000  00000000  000630a5  2**0
                   CONTENTS, READONLY
- 29 .quartus_project_dir 00000025  00000000  00000000  000630e9  2**0
+ 29 .quartus_project_dir 00000025  00000000  00000000  000630b5  2**0
                   CONTENTS, READONLY
- 30 .sopcinfo     000502b3  00000000  00000000  0006310e  2**0
+ 30 .sopcinfo     000502b3  00000000  00000000  000630da  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 04000000 l    d  .entry	00000000 .entry
@@ -100,7 +100,7 @@ SYMBOL TABLE:
 00000000 l    d  .debug_ranges	00000000 .debug_ranges
 00000000 l    df *ABS*	00000000 ../kalman_filter_bsp//obj/HAL/src/crt0.o
 04000068 l       .text	00000000 alt_after_alt_main
-00000000 l    df *ABS*	00000000 hello_world_small.c
+00000000 l    df *ABS*	00000000 main.c
 00000000 l    df *ABS*	00000000 gesf2.c
 00000000 l    df *ABS*	00000000 fixsfsi.c
 00000000 l    df *ABS*	00000000 floatsisf.c
