@@ -1,0 +1,156 @@
+# Reading C:/intelFPGA_lite/18.1/modelsim_ase/tcl/vsim/pref.tcl
+# do kalman_filter_run_msim_rtl_verilog.do
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Model Technology ModelSim - Intel FPGA Edition vmap 10.5b Lib Mapping Utility 2016.10 Oct  5 2016
+# vmap work rtl_work 
+# Copying C:/intelFPGA_lite/18.1/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# 
+# vlog -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src {C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/state_update.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 01:51:25 on May 25,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src" C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/state_update.v 
+# -- Compiling module state_update
+# 
+# Top level modules:
+# 	state_update
+# End time: 01:51:25 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src {C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/mult.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 01:51:25 on May 25,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src" C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/mult.v 
+# -- Compiling module mult
+# 
+# Top level modules:
+# 	mult
+# End time: 01:51:25 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src {C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/matrix_multiplication.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 01:51:25 on May 25,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src" C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/matrix_multiplication.v 
+# -- Compiling module sequential_matrix_multiply
+# -- Compiling module parallel_matrix_multiply
+# -- Compiling module coefficient_calc
+# 
+# Top level modules:
+# 	sequential_matrix_multiply
+# 	parallel_matrix_multiply
+# End time: 01:51:26 on May 25,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src {C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/kalman.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 01:51:26 on May 25,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src" C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/kalman.v 
+# -- Compiling module kalman
+# 
+# Top level modules:
+# 	kalman
+# End time: 01:51:26 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src {C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/fixedpoint_multiplier.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 01:51:26 on May 25,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src" C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/fixedpoint_multiplier.v 
+# -- Compiling module qmult
+# 
+# Top level modules:
+# 	qmult
+# End time: 01:51:26 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src {C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/div2.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 01:51:26 on May 25,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src" C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/div2.v 
+# -- Compiling module div2
+# 
+# Top level modules:
+# 	div2
+# End time: 01:51:26 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src {C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/cordic.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 01:51:26 on May 25,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src" C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/cordic.v 
+# -- Compiling module CORDIC
+# 
+# Top level modules:
+# 	CORDIC
+# End time: 01:51:26 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# vlog -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation {C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation/fixedpoint_multiplier_tb.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 01:51:26 on May 25,2026
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation" C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation/fixedpoint_multiplier_tb.v 
+# -- Compiling module qmult_tb
+# 
+# Top level modules:
+# 	qmult_tb
+# End time: 01:51:26 on May 25,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L fiftyfivenm_ver -L rtl_work -L work -voptargs="+acc"  qmult_tb
+# vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L fiftyfivenm_ver -L rtl_work -L work -voptargs=""+acc"" qmult_tb 
+# Start time: 01:51:26 on May 25,2026
+# Loading work.qmult_tb
+# Loading work.qmult
+# Loading work.mult
+# Loading lpm_ver.lpm_mult
+# Loading lpm_ver.LPM_HINT_EVALUATION
+# 
+# add wave *
+# view structure
+# .main_pane.structure.interior.cs.body.struct
+# view signals
+# .main_pane.objects.interior.cs.body.tree
+# run -all
+# Starting Signed Fixed-Point Multiplier (Q14.18) Testbench...
+# -----------------------------------------------------------------
+# 
+# [Test Case 1: Positive * Positive]
+#   PASS : 2.000000 * 3.000000 = 6.000000 (Hex: 00180000)
+# 
+# [Test Case 2: Positive * Negative (Fractional)]
+#   PASS : 1.500000 * -0.500000 = -0.750000 (Hex: fffd0000)
+# 
+# [Test Case 3: Negative * Negative]
+#   PASS : -2.000000 * -1.500000 = 3.000000 (Hex: 000c0000)
+# 
+# [Test Case 4: Identity Multiplication]
+#   PASS : -4.000000 * 1.000000 = -4.000000 (Hex: fff00000)
+# 
+# [Test Case 5: Underflow Check]
+#   PASS : 0.003906 * 0.000488 = 0.000000 (Hex: 00000000)
+# 
+# [Running 15 Random Tests within safe range [-64.0, 64.0]]
+#   PASS : -9.340118 * -2.738136 = 25.574516 (Hex: 00664c4e)
+#   PASS : -28.568947 * 14.472374 = -413.460480 (Hex: f98a2878)
+#   PASS : -28.491432 * 5.357689 = -152.648228 (Hex: fd9d6837)
+#   PASS : 20.265083 * 6.987480 = 141.601864 (Hex: 0236684f)
+#   PASS : -18.183201 * 1.583229 = -28.788170 (Hex: ff8cd8ea)
+#   PASS : 30.277748 * -22.545212 = -682.618240 (Hex: f55586ec)
+#   PASS : -26.255436 * 6.775719 = -177.899445 (Hex: fd3866f8)
+#   PASS : -25.697063 * 27.367020 = -703.252037 (Hex: f502fdea)
+#   PASS : 7.813164 * 28.376453 = 221.709877 (Hex: 0376d6ea)
+#   PASS : 19.179546 * 27.763691 = 532.494995 (Hex: 0851fae0)
+#   PASS : 19.381725 * -31.871948 = -617.733345 (Hex: f659110e)
+#   PASS : 22.599506 * 30.616230 = 691.911682 (Hex: 0acfa590)
+#   PASS : -18.112164 * 17.780186 = -322.037628 (Hex: faf7d978)
+#   PASS : -27.964489 * -19.346153 = 541.005287 (Hex: 0874056a)
+#   PASS : -3.717438 * -31.428181 = 116.832302 (Hex: 01d35447)
+# -----------------------------------------------------------------
+# Simulation Finished: ALL TESTS PASSED.
+# -----------------------------------------------------------------
+# ** Note: $finish    : C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation/fixedpoint_multiplier_tb.v(77)
+#    Time: 310 ns  Iteration: 0  Instance: /qmult_tb
+# 1
+# Break in Module qmult_tb at C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation/fixedpoint_multiplier_tb.v line 77
+quit
+# End time: 01:51:39 on May 25,2026, Elapsed time: 0:00:13
+# Errors: 0, Warnings: 0

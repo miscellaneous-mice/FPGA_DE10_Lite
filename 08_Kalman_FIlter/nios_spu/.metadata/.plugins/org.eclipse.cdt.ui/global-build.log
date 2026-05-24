@@ -1,4 +1,4 @@
-01:22:39 **** Build of configuration Nios II for project kalman_filter ****
+01:53:32 **** Build of configuration Nios II for project kalman_filter ****
 make all 
 Info: Building ../kalman_filter_bsp/
 C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../kalman_filter_bsp/
@@ -11,19 +11,31 @@ c:/intelfpga_lite/18.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-el
 /build/arc/temp/823101626/ACDS_lwr/ip/sopc/app/gnu/BUILD/gnu/build-newlib.nios2-elf.x86_64-w64-mingw32/nios2-elf/newlib/libc/reent/../../../../../src/newlib-2.2/newlib/libc/reent/closer.c:53: warning: warning: close is not implemented and will always fail
 c:/intelfpga_lite/18.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-lseekr.o): In function `_lseek_r':
 /build/arc/temp/823101626/ACDS_lwr/ip/sopc/app/gnu/BUILD/gnu/build-newlib.nios2-elf.x86_64-w64-mingw32/nios2-elf/newlib/libc/reent/../../../../../src/newlib-2.2/newlib/libc/reent/lseekr.c:58: warning: warning: lseek is not implemented and will always fail
-nios2-elf-insert kalman_filter.elf --thread_model hal --cpu_name NIOS --qsys true --simulation_enabled false --id 0 --sidp 0x8201088 --timestamp 1779304945 --stderr_dev DEBUG --stdin_dev DEBUG --stdout_dev DEBUG --sopc_system_name kalman_interface --quartus_project_dir "C:/Sandbox/FPGA/08_Kalman_FIlter/Qsys" --sopcinfo C:/Sandbox/FPGA/08_Kalman_FIlter/Qsys/software/kalman_filter_bsp/../../kalman_interface.sopcinfo
-Info: (kalman_filter.elf) 58 KBytes program size (code + initialized data).
-Info:                     65474 KBytes free for stack + heap.
+nios2-elf-insert kalman_filter.elf --thread_model hal --cpu_name NIOS --qsys true --simulation_enabled false --id 0 --sidp 0x8201088 --timestamp 1779308355 --stderr_dev DEBUG --stdin_dev DEBUG --stdout_dev DEBUG --sopc_system_name kalman_interface --quartus_project_dir "C:/Sandbox/FPGA/08_Kalman_FIlter/Qsys" --sopcinfo C:/Sandbox/FPGA/08_Kalman_FIlter/Qsys/software/kalman_filter_bsp/../../kalman_interface.sopcinfo
+Info: (kalman_filter.elf) 68 KBytes program size (code + initialized data).
+Info:                     65464 KBytes free for stack + heap.
 Info: Creating kalman_filter.objdump
 nios2-elf-objdump --disassemble --syms --all-header --source kalman_filter.elf >kalman_filter.objdump
 [kalman_filter build complete]
-01:22:48 **** Build of configuration Nios II for project kalman_filter ****
+01:53:40 **** Build of configuration Nios II for project kalman_filter ****
 make all 
 Info: Building ../kalman_filter_bsp/
 C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../kalman_filter_bsp/
 [BSP build complete]
 [kalman_filter build complete]
-01:22:49 **** Incremental Build of configuration Nios II for project kalman_filter ****
+01:53:41 **** Incremental Build of configuration Nios II for project kalman_filter ****
+make all 
+Info: Building ../kalman_filter_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../kalman_filter_bsp/
+[BSP build complete]
+[kalman_filter build complete]
+01:55:03 **** Build of configuration Nios II for project kalman_filter ****
+make all 
+Info: Building ../kalman_filter_bsp/
+C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../kalman_filter_bsp/
+[BSP build complete]
+[kalman_filter build complete]
+01:55:04 **** Incremental Build of configuration Nios II for project kalman_filter ****
 make all 
 Info: Building ../kalman_filter_bsp/
 C:/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C ../kalman_filter_bsp/

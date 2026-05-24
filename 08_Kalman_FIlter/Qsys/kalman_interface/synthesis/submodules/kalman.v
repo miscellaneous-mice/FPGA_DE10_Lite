@@ -43,10 +43,14 @@ parameter signed [N-1:0] numerator = 2**31-1;
 reg signed [4*4*N-1:0] Pk_prev, Pk_mult_result, P_matrix , temp_matrix; 
 wire signed [4*4*N-1:0] I_KC,Pk_C_transpose,matrix_invert,Pk,F,F_transpose,I;
 //Q matrix (only diagonal coefficients matter)
-parameter signed [N-1:0] Q00 = 0.01*sf;
-parameter signed [N-1:0] Q11=0.01*sf;
-parameter signed [N-1:0] Q22=20*sf;
-parameter signed [N-1:0] Q33=0.0001*sf;
+// parameter signed [N-1:0] Q00 = 0.01*sf;
+// parameter signed [N-1:0] Q11=0.01*sf;
+// parameter signed [N-1:0] Q22=20*sf;
+// parameter signed [N-1:0] Q33=0.0001*sf;
+parameter signed [N-1:0] Q00 = 0.001*sf; // Was 0.01
+parameter signed [N-1:0] Q11 = 0.001*sf; // Was 0.01
+parameter signed [N-1:0] Q22 = 0.5*sf;   // Was 20 (This was the main culprit!)
+parameter signed [N-1:0] Q33 = 0.0001*sf;
 
 //R matrix 2x2 matrix
 parameter signed [N-1:0] R00 = 0.92*sf;
@@ -179,7 +183,12 @@ if(!reset) begin
   xe_prev[3] <=0;
   wait_counter <=0;
   ////P0 initialisation
-  Pk_prev <= {{1*sf,32'b0,32'b0,32'b0},{32'b0,10*sf,32'b0,32'b0},{32'b0,32'b0,5*sf,32'b0},{32'b0,32'b0,32'b0,5*sf}};
+  // Pk_prev <= {{1*sf,32'b0,32'b0,32'b0},{32'b0,10*sf,32'b0,32'b0},{32'b0,32'b0,5*sf,32'b0},{32'b0,32'b0,32'b0,5*sf}};
+  // Changed 10*sf and 5*sf to 0.1*sf to prevent startup multiplier overflow
+  Pk_prev <= {{0.1*sf, 32'b0, 32'b0, 32'b0},
+              {32'b0, 0.1*sf, 32'b0, 32'b0},
+              {32'b0, 32'b0, 0.1*sf, 32'b0},
+              {32'b0, 32'b0, 32'b0, 0.1*sf}};
   temp_matrix <= 0;
   //reset_smm=1;
   state <= s0;

@@ -1,0 +1,231 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation/modelsim
+vcoefficient_calc
+Z1 !s110 1779654086
+!i10b 1
+!s100 CMJcMW_^0^F:VjfP6820<3
+I]JZHDd8Tce1CfzmBbO[e^3
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1779300093
+Z4 8C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/matrix_multiplication.v
+Z5 FC:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/matrix_multiplication.v
+L0 166
+Z6 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z7 !s108 1779654085.000000
+Z8 !s107 C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/matrix_multiplication.v|
+Z9 !s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src|C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/matrix_multiplication.v|
+!i113 1
+Z10 o-vlog01compat -work work
+Z11 !s92 -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src
+Z12 tCvgOpt 0
+vCORDIC
+R1
+!i10b 1
+!s100 5Q;I2GRChI3;;GXA]NPQ73
+Ico<c6Ym<64Pgd8?1P]I<=0
+R2
+R0
+R3
+8C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/cordic.v
+FC:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/cordic.v
+L0 5
+R6
+r1
+!s85 0
+31
+Z13 !s108 1779654086.000000
+!s107 C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/cordic.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src|C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/cordic.v|
+!i113 1
+R10
+R11
+R12
+n@c@o@r@d@i@c
+vdiv2
+R1
+!i10b 1
+!s100 H26M_`mQAlIUTESRGTPPY1
+ICnRF[hHe>GD?YPRN8a3Pz1
+R2
+R0
+R3
+8C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/div2.v
+FC:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/div2.v
+Z14 L0 40
+R6
+r1
+!s85 0
+31
+R13
+!s107 C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/div2.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src|C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/div2.v|
+!i113 1
+R10
+R11
+R12
+vkalman
+R1
+!i10b 1
+!s100 2f^ZBY_MUP4z@0k=cjk7n1
+Iz8CCWi]h;b3>5ej8mLG252
+R2
+R0
+w1779308243
+8C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/kalman.v
+FC:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/kalman.v
+L0 2
+R6
+r1
+!s85 0
+31
+R13
+!s107 C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/kalman.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src|C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/kalman.v|
+!i113 1
+R10
+R11
+R12
+vmult
+Z15 !s110 1779654085
+!i10b 1
+!s100 m8QeQa8S9_8jKR;2D1E6@1
+IFhTLMj4knXc_6d3c9>h3N1
+R2
+R0
+R3
+8C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/mult.v
+FC:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/mult.v
+R14
+R6
+r1
+!s85 0
+31
+R7
+!s107 C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/mult.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src|C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/mult.v|
+!i113 1
+R10
+R11
+R12
+vparallel_matrix_multiply
+R1
+!i10b 1
+!s100 c=M8ESd5K]:ocOa373UCG3
+I^OTLcTFLlaKgEFnM9PBGE1
+R2
+R0
+R3
+R4
+R5
+L0 131
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+R12
+vqmult
+R1
+!i10b 1
+!s100 Fk4nR=MVnYRXVo7T=mgXd0
+IiIVS[`lP2C`4QE2V_B`oj3
+R2
+R0
+R3
+8C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/fixedpoint_multiplier.v
+FC:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/fixedpoint_multiplier.v
+L0 9
+R6
+r1
+!s85 0
+31
+R13
+!s107 C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/fixedpoint_multiplier.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src|C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/fixedpoint_multiplier.v|
+!i113 1
+R10
+R11
+R12
+vqmult_tb
+R1
+!i10b 1
+!s100 O@BdYgj_76f^L^YNeVVLc1
+IY_AR`AaKlN4@mRRWU8CPD0
+R2
+R0
+w1779654077
+8C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation/fixedpoint_multiplier_tb.v
+FC:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation/fixedpoint_multiplier_tb.v
+L0 3
+R6
+r1
+!s85 0
+31
+R13
+!s107 C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation/fixedpoint_multiplier_tb.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation|C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation/fixedpoint_multiplier_tb.v|
+!i113 1
+R10
+!s92 -vlog01compat -work work +incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/simulation
+R12
+vsequential_matrix_multiply
+R1
+!i10b 1
+!s100 ?RkG4<zVmKnoW]`Fed9T^2
+IhLf]6e8A_NL;WReV;Smb;0
+R2
+R0
+R3
+R4
+R5
+L0 1
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+R12
+vstate_update
+R15
+!i10b 1
+!s100 bC0Kfm:DiMK2DY5JKCBd91
+IDM<8Qh_@2Wd`L:QgU]Q[E2
+R2
+R0
+R3
+8C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/state_update.v
+FC:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/state_update.v
+L0 1
+R6
+r1
+!s85 0
+31
+R7
+!s107 C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/state_update.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src|C:/Sandbox/FPGA/08_Kalman_FIlter/Testing/src/state_update.v|
+!i113 1
+R10
+R11
+R12

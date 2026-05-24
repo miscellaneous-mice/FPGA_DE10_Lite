@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <math.h>
+#include "system.h"
+#include "io.h"
+#include <unistd.h>
+
+#define Q_SHIFT 18
+#define FLOAT_TO_FIXED(x) ((signed int)((x) * (1 << Q_SHIFT)))
+#define FIXED_TO_FLOAT(x) ((float)(x) / (float)(1 << Q_SHIFT))
+
+#define REG_VALPHA    (0  * 4)
+#define REG_VBETA     (1  * 4)
+#define REG_IALPHAM   (2  * 4)
+#define REG_IBETAM    (3  * 4)
+#define REG_NBSAMPLES (6  * 4)
+#define REG_OMEGA     (7  * 4)
+#define REG_THETA     (8  * 4)
+
+// Create arrays in SDRAM to hold the history of the run
+#define LOG_SIZE 1000
+float log_time[LOG_SIZE];
+float log_omega[LOG_SIZE];
+float log_theta[LOG_SIZE];
+
+int main() {
+    printf("Starting Jitter-Free Kalman Filter Test...\n");
+
+    // Tell the FPGA to wait 50,000 clock cycles (1 millisecond) between runs.
+    // This forces the FPGA to wait for the Nios II processor, keeping them perfectly synced.
+    IOWR_32DIRECT(KALMAN_BASE, REG_NBSAMPLES, 50000);
+
+    float t = 0.0;
+    float Ts = 0.00001; // Matches your Verilog hardcoded Ts
+
+    // Scaled-down motor parameters to prevent startup overflow
+    float simulated_omega = 50.0; // rad/s
+    float v_amplitude = 2.0;      // Volts
+    float i_amplitude = 0.5;      // Amps
+    float phase_delay = 0.5;      // Radians
+
+    printf("Running hardware simulation...\n");
+
+    // =============================================================
+    // HIGH-SPEED HARDWARE LOOP (NO PRINTF ALLOWED HERE)
+    // =============================================================
+    for (int i = 0; i < LOG_SIZE; i++) {
+        // 1. Calculate physical sine waves
+        float v_alpha = v_amplitude * cos(simulated_omega * t);
+        float v_beta  = v_amplitude * sin(simulated_omega * t);
+        float i_alpha = i_amplitude * cos(simulated_omega * t - phase_delay);
+        float i_beta  = i_amplitude * sin(simulated_omega * t - phase_delay);
+
+        // 2. Write to FPGA
+        IOWR_32DIRECT(KALMAN_BASE, REG_VALPHA,  FLOAT_TO_FIXED(v_alpha));
+        IOWR_32DIRECT(KALMAN_BASE, REG_VBETA,   FLOAT_TO_FIXED(v_beta));
+        IOWR_32DIRECT(KALMAN_BASE, REG_IALPHAM, FLOAT_TO_FIXED(i_alpha));
+        IOWR_32DIRECT(KALMAN_BASE, REG_IBETAM,  FLOAT_TO_FIXED(i_beta));
+
+        // 3. Brief sleep to allow FPGA to wake up, compute (takes ~80 cycles), and go back to sleep
+        usleep(100);
+
+        // 4. Read the computed outputs and save to array
+        log_omega[i] = FIXED_TO_FLOAT(IORD_32DIRECT(KALMAN_BASE, REG_OMEGA));
+        log_theta[i] = FIXED_TO_FLOAT(IORD_32DIRECT(KALMAN_BASE, REG_THETA));
+        log_time[i]  = t;
+
+        // 5. Advance physics time
+        t += Ts;
+    }
+
+    // =============================================================
+    // PRINT THE LOG AFTER HARDWARE IS DONE
+    // =============================================================
+    printf("Hardware run complete! Printing results:\n");
+    printf("----------------------------------------------------\n");
+
+    // Print every 10th sample to avoid flooding the console
+    for (int i = 0; i < LOG_SIZE; i += 10) {
+        printf("Time: %.5f s | Target Om: 50.0 | Est_Omega: %8.2f rad/s | Est_Theta: %8.2f rad\n",
+               log_time[i], log_omega[i], log_theta[i]);
+    }
+
+    printf("Test finished successfully.\n");
+    return 0;
+}

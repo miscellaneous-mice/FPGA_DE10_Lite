@@ -1,8 +1,28 @@
 # # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
 # 
-preplace inst unsaved.clk_0 -pg 1 -lvl 1 -y 30
-preplace inst unsaved -pg 1 -lvl 1 -y 40 -regy -20
-preplace netloc EXPORT<net_container>unsaved</net_container>(SLAVE)unsaved.clk,(SLAVE)clk_0.clk_in) 1 0 1 NJ
-preplace netloc EXPORT<net_container>unsaved</net_container>(SLAVE)unsaved.reset,(SLAVE)clk_0.clk_in_reset) 1 0 1 NJ
-levelinfo -pg 1 0 50 270
-levelinfo -hier unsaved 60 90 260
+preplace inst kalman_interface.SDRAM_PLL -pg 1 -lvl 3 -y 570
+preplace inst kalman_interface.clk_0 -pg 1 -lvl 2 -y 530
+preplace inst kalman_interface.NIOS.reset_bridge -pg 1
+preplace inst kalman_interface.FLASH_MEM -pg 1 -lvl 2 -y 30
+preplace inst kalman_interface.DEBUG -pg 1 -lvl 2 -y 150
+preplace inst kalman_interface.NIOS -pg 1 -lvl 1 -y 130
+preplace inst kalman_interface.SDRAM -pg 1 -lvl 2 -y 410
+preplace inst kalman_interface.NIOS.clock_bridge -pg 1
+preplace inst kalman_interface.NIOS.cpu -pg 1
+preplace inst kalman_interface.FPU -pg 1 -lvl 3 -y 130
+preplace inst kalman_interface.SYS_ID -pg 1 -lvl 2 -y 330
+preplace inst kalman_interface.KALMAN -pg 1 -lvl 2 -y 250
+preplace inst kalman_interface -pg 1 -lvl 1 -y 40 -regy -20
+preplace netloc EXPORT<net_container>kalman_interface</net_container>(SLAVE)clk_0.clk_in,(SLAVE)kalman_interface.clk) 1 0 2 NJ 540 NJ
+preplace netloc FAN_OUT<net_container>kalman_interface</net_container>(SLAVE)SYS_ID.clk,(SLAVE)KALMAN.clock,(SLAVE)DEBUG.clk,(MASTER)SDRAM_PLL.c0,(SLAVE)FLASH_MEM.clk,(SLAVE)SDRAM.clk,(SLAVE)NIOS.clk) 1 0 4 110 90 490 520 NJ 520 1010
+preplace netloc INTERCONNECT<net_container>kalman_interface</net_container>(MASTER)NIOS.instruction_master,(SLAVE)SYS_ID.control_slave,(MASTER)NIOS.data_master,(SLAVE)FLASH_MEM.csr,(SLAVE)FLASH_MEM.data,(SLAVE)KALMAN.s0,(SLAVE)NIOS.debug_mem_slave,(SLAVE)DEBUG.avalon_jtag_slave,(SLAVE)SDRAM.s1) 1 0 2 110 290 510
+preplace netloc POINT_TO_POINT<net_container>kalman_interface</net_container>(MASTER)clk_0.clk,(SLAVE)SDRAM_PLL.inclk_interface) 1 2 1 790
+preplace netloc EXPORT<net_container>kalman_interface</net_container>(SLAVE)SDRAM_PLL.locked_conduit,(SLAVE)kalman_interface.pll_locked) 1 0 3 NJ 640 NJ 640 NJ
+preplace netloc EXPORT<net_container>kalman_interface</net_container>(MASTER)SDRAM_PLL.c1,(MASTER)kalman_interface.sdram_clk) 1 3 1 N
+preplace netloc EXPORT<net_container>kalman_interface</net_container>(SLAVE)kalman_interface.pll_areset,(SLAVE)SDRAM_PLL.areset_conduit) 1 0 3 NJ 600 NJ 600 NJ
+preplace netloc INTERCONNECT<net_container>kalman_interface</net_container>(MASTER)NIOS.debug_reset_request,(SLAVE)FLASH_MEM.nreset,(SLAVE)NIOS.reset,(SLAVE)SDRAM_PLL.inclk_interface_reset,(SLAVE)SYS_ID.reset,(SLAVE)KALMAN.reset,(SLAVE)clk_0.clk_in_reset,(SLAVE)DEBUG.reset,(MASTER)clk_0.clk_reset,(SLAVE)SDRAM.reset) 1 0 3 130 270 550 620 750
+preplace netloc POINT_TO_POINT<net_container>kalman_interface</net_container>(SLAVE)FPU.s1,(MASTER)NIOS.custom_instruction_master) 1 1 2 NJ 140 NJ
+preplace netloc POINT_TO_POINT<net_container>kalman_interface</net_container>(MASTER)NIOS.irq,(SLAVE)DEBUG.irq) 1 1 1 530
+preplace netloc EXPORT<net_container>kalman_interface</net_container>(SLAVE)kalman_interface.sdram_wire,(SLAVE)SDRAM.wire) 1 0 2 NJ 480 NJ
+levelinfo -pg 1 0 80 1120
+levelinfo -hier kalman_interface 90 250 580 820 1030

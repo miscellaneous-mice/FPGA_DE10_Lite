@@ -145,6 +145,14 @@
          type = "String";
       }
    }
+   element kalman_interface
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
@@ -213,7 +221,7 @@
   <parameter name="READ_BURST_COUNT" value="8" />
   <parameter name="READ_BURST_MODE" value="Incrementing" />
   <parameter name="SECTOR_ACCESS_MODE">Read and write,Read and write,Read and write,Read and write,Read and write</parameter>
-  <parameter name="autoInitializationFileName">$${FILENAME}_FLASH_MEM</parameter>
+  <parameter name="autoInitializationFileName">kalman_interface_FLASH_MEM</parameter>
   <parameter name="initFlashContent" value="false" />
   <parameter name="initializationFileName">altera_onchip_flash.hex</parameter>
   <parameter name="initializationFileNameForSim">altera_onchip_flash.dat</parameter>
@@ -231,8 +239,8 @@
   <parameter name="Q" value="18" />
  </module>
  <module name="NIOS" kind="altera_nios2_gen2" version="18.1" enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="4" />
-  <parameter name="AUTO_CLK_RESET_DOMAIN" value="4" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="2" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="2" />
   <parameter name="AUTO_DEVICE" value="10M50DAF484C7G" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="7" />
   <parameter name="bht_ramBlockType" value="Automatic" />
@@ -422,7 +430,7 @@
   <parameter name="casLatency" value="3" />
   <parameter name="clockRate" value="50000000" />
   <parameter name="columnWidth" value="10" />
-  <parameter name="componentName" value="$${FILENAME}_SDRAM" />
+  <parameter name="componentName">kalman_interface_SDRAM</parameter>
   <parameter name="dataWidth" value="16" />
   <parameter name="generateSimulationModel" value="false" />
   <parameter name="initNOPDelay" value="0.0" />

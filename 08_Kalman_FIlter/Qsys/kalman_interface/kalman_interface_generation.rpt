@@ -68,7 +68,7 @@ Warning: kalman_interface: "No matching role found for NIOS_custom_instruction_m
 Warning: kalman_interface: "No matching role found for NIOS_custom_instruction_master_multi_xconnect:ci_slave:ci_slave_ipending (ipending)"
 Warning: kalman_interface: "No matching role found for NIOS_custom_instruction_master_multi_xconnect:ci_slave:ci_slave_estatus (estatus)"
 Info: DEBUG: Starting RTL generation for module 'kalman_interface_DEBUG'
-Info: DEBUG:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart/generate_rtl.pl --name=kalman_interface_DEBUG --dir=C:/Users/prate/AppData/Local/Temp/alt0593_8303657348358433292.dir/0003_DEBUG_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/prate/AppData/Local/Temp/alt0593_8303657348358433292.dir/0003_DEBUG_gen//kalman_interface_DEBUG_component_configuration.pl  --do_build_sim=0  ]
+Info: DEBUG:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart/generate_rtl.pl --name=kalman_interface_DEBUG --dir=C:/Users/prate/AppData/Local/Temp/alt0593_4637988258337919109.dir/0003_DEBUG_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/prate/AppData/Local/Temp/alt0593_4637988258337919109.dir/0003_DEBUG_gen//kalman_interface_DEBUG_component_configuration.pl  --do_build_sim=0  ]
 Info: DEBUG: Done RTL generation for module 'kalman_interface_DEBUG'
 Info: DEBUG: "kalman_interface" instantiated altera_avalon_jtag_uart "DEBUG"
 Info: FLASH_MEM: Generating top-level entity altera_onchip_flash
@@ -77,7 +77,7 @@ Info: FPU: "kalman_interface" instantiated altera_nios_custom_instr_floating_poi
 Info: KALMAN: "kalman_interface" instantiated kalman_filter "KALMAN"
 Info: NIOS: "kalman_interface" instantiated altera_nios2_gen2 "NIOS"
 Info: SDRAM: Starting RTL generation for module 'kalman_interface_SDRAM'
-Info: SDRAM:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller/generate_rtl.pl --name=kalman_interface_SDRAM --dir=C:/Users/prate/AppData/Local/Temp/alt0593_8303657348358433292.dir/0006_SDRAM_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/prate/AppData/Local/Temp/alt0593_8303657348358433292.dir/0006_SDRAM_gen//kalman_interface_SDRAM_component_configuration.pl  --do_build_sim=0  ]
+Info: SDRAM:   Generation command is [exec C:/intelfpga_lite/18.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/18.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller -- C:/intelfpga_lite/18.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller/generate_rtl.pl --name=kalman_interface_SDRAM --dir=C:/Users/prate/AppData/Local/Temp/alt0593_4637988258337919109.dir/0006_SDRAM_gen/ --quartus_dir=C:/intelfpga_lite/18.1/quartus --verilog --config=C:/Users/prate/AppData/Local/Temp/alt0593_4637988258337919109.dir/0006_SDRAM_gen//kalman_interface_SDRAM_component_configuration.pl  --do_build_sim=0  ]
 Info: SDRAM: Done RTL generation for module 'kalman_interface_SDRAM'
 Info: SDRAM: "kalman_interface" instantiated altera_avalon_new_sdram_controller "SDRAM"
 Info: SDRAM_PLL: "kalman_interface" instantiated altpll "SDRAM_PLL"
@@ -96,31 +96,31 @@ Info: mm_interconnect_0: "kalman_interface" instantiated altera_mm_interconnect 
 Info: irq_mapper: "kalman_interface" instantiated altera_irq_mapper "irq_mapper"
 Info: rst_controller: "kalman_interface" instantiated altera_reset_controller "rst_controller"
 Info: cpu: Starting RTL generation for module 'kalman_interface_NIOS_cpu'
-Info: cpu:   Generation command is [exec C:/intelFPGA_lite/18.1/quartus/bin64//eperlcmd.exe -I C:/intelFPGA_lite/18.1/quartus/bin64//perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/cpu_lib -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/nios_lib -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -- C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/generate_rtl.epl --name=kalman_interface_NIOS_cpu --dir=C:/Users/prate/AppData/Local/Temp/alt0593_8303657348358433292.dir/0015_cpu_gen/ --quartus_bindir=C:/intelFPGA_lite/18.1/quartus/bin64/ --verilog --config=C:/Users/prate/AppData/Local/Temp/alt0593_8303657348358433292.dir/0015_cpu_gen//kalman_interface_NIOS_cpu_processor_configuration.pl  --do_build_sim=0  ]
-Info: cpu: # 2026.05.21 00:52:34 (*) Starting Nios II generation
-Info: cpu: # 2026.05.21 00:52:34 (*)   Checking for plaintext license.
-Info: cpu: # 2026.05.21 00:52:34 (*)   Couldn't query license setup in Quartus directory C:/intelFPGA_lite/18.1/quartus/bin64/
-Info: cpu: # 2026.05.21 00:52:34 (*)   Defaulting to contents of LM_LICENSE_FILE environment variable
-Info: cpu: # 2026.05.21 00:52:34 (*)   LM_LICENSE_FILE environment variable is empty
-Info: cpu: # 2026.05.21 00:52:34 (*)   Plaintext license not found.
-Info: cpu: # 2026.05.21 00:52:34 (*)   Checking for encrypted license (non-evaluation).
-Info: cpu: # 2026.05.21 00:52:34 (*)   Couldn't query license setup in Quartus directory C:/intelFPGA_lite/18.1/quartus/bin64/
-Info: cpu: # 2026.05.21 00:52:34 (*)   Defaulting to contents of LM_LICENSE_FILE environment variable
-Info: cpu: # 2026.05.21 00:52:34 (*)   LM_LICENSE_FILE environment variable is empty
-Info: cpu: # 2026.05.21 00:52:34 (*)   Encrypted license not found.  Defaulting to OCP evaluation license (produces a time-limited SOF)
-Info: cpu: # 2026.05.21 00:52:34 (*)   Elaborating CPU configuration settings
-Info: cpu: # 2026.05.21 00:52:34 (*)   Creating all objects for CPU
-Info: cpu: # 2026.05.21 00:52:34 (*)     Testbench
-Info: cpu: # 2026.05.21 00:52:34 (*)     Instruction decoding
-Info: cpu: # 2026.05.21 00:52:34 (*)       Instruction fields
-Info: cpu: # 2026.05.21 00:52:34 (*)       Instruction decodes
-Info: cpu: # 2026.05.21 00:52:35 (*)       Signals for RTL simulation waveforms
-Info: cpu: # 2026.05.21 00:52:35 (*)       Instruction controls
-Info: cpu: # 2026.05.21 00:52:35 (*)     Pipeline frontend
-Info: cpu: # 2026.05.21 00:52:35 (*)     Pipeline backend
-Info: cpu: # 2026.05.21 00:52:36 (*)   Generating RTL from CPU objects
-Info: cpu: # 2026.05.21 00:52:36 (*)   Creating encrypted RTL
-Info: cpu: # 2026.05.21 00:52:37 (*) Done Nios II generation
+Info: cpu:   Generation command is [exec C:/intelFPGA_lite/18.1/quartus/bin64//eperlcmd.exe -I C:/intelFPGA_lite/18.1/quartus/bin64//perl/lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin/perl_lib -I C:/intelfpga_lite/18.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/cpu_lib -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/nios_lib -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -I C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -- C:/intelfpga_lite/18.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/generate_rtl.epl --name=kalman_interface_NIOS_cpu --dir=C:/Users/prate/AppData/Local/Temp/alt0593_4637988258337919109.dir/0015_cpu_gen/ --quartus_bindir=C:/intelFPGA_lite/18.1/quartus/bin64/ --verilog --config=C:/Users/prate/AppData/Local/Temp/alt0593_4637988258337919109.dir/0015_cpu_gen//kalman_interface_NIOS_cpu_processor_configuration.pl  --do_build_sim=0  ]
+Info: cpu: # 2026.05.21 01:49:23 (*) Starting Nios II generation
+Info: cpu: # 2026.05.21 01:49:23 (*)   Checking for plaintext license.
+Info: cpu: # 2026.05.21 01:49:24 (*)   Couldn't query license setup in Quartus directory C:/intelFPGA_lite/18.1/quartus/bin64/
+Info: cpu: # 2026.05.21 01:49:24 (*)   Defaulting to contents of LM_LICENSE_FILE environment variable
+Info: cpu: # 2026.05.21 01:49:24 (*)   LM_LICENSE_FILE environment variable is empty
+Info: cpu: # 2026.05.21 01:49:24 (*)   Plaintext license not found.
+Info: cpu: # 2026.05.21 01:49:24 (*)   Checking for encrypted license (non-evaluation).
+Info: cpu: # 2026.05.21 01:49:24 (*)   Couldn't query license setup in Quartus directory C:/intelFPGA_lite/18.1/quartus/bin64/
+Info: cpu: # 2026.05.21 01:49:24 (*)   Defaulting to contents of LM_LICENSE_FILE environment variable
+Info: cpu: # 2026.05.21 01:49:24 (*)   LM_LICENSE_FILE environment variable is empty
+Info: cpu: # 2026.05.21 01:49:24 (*)   Encrypted license not found.  Defaulting to OCP evaluation license (produces a time-limited SOF)
+Info: cpu: # 2026.05.21 01:49:24 (*)   Elaborating CPU configuration settings
+Info: cpu: # 2026.05.21 01:49:24 (*)   Creating all objects for CPU
+Info: cpu: # 2026.05.21 01:49:24 (*)     Testbench
+Info: cpu: # 2026.05.21 01:49:24 (*)     Instruction decoding
+Info: cpu: # 2026.05.21 01:49:24 (*)       Instruction fields
+Info: cpu: # 2026.05.21 01:49:24 (*)       Instruction decodes
+Info: cpu: # 2026.05.21 01:49:24 (*)       Signals for RTL simulation waveforms
+Info: cpu: # 2026.05.21 01:49:24 (*)       Instruction controls
+Info: cpu: # 2026.05.21 01:49:24 (*)     Pipeline frontend
+Info: cpu: # 2026.05.21 01:49:24 (*)     Pipeline backend
+Info: cpu: # 2026.05.21 01:49:25 (*)   Generating RTL from CPU objects
+Info: cpu: # 2026.05.21 01:49:26 (*)   Creating encrypted RTL
+Info: cpu: # 2026.05.21 01:49:27 (*) Done Nios II generation
 Info: cpu: Done RTL generation for module 'kalman_interface_NIOS_cpu'
 Info: cpu: "NIOS" instantiated altera_nios2_gen2_unit "cpu"
 Info: NIOS_data_master_translator: "mm_interconnect_0" instantiated altera_merlin_master_translator "NIOS_data_master_translator"

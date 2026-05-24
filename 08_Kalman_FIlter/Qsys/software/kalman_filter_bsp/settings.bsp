@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 21, 2026 1:17:53 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1779306473529</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 21, 2026 1:53:12 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1779308592716</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Sandbox\FPGA\08_Kalman_FIlter\Qsys\software\kalman_filter_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\kalman_interface.sopcinfo</SopcDesignFile>
